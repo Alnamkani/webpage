@@ -1,0 +1,19 @@
+h1 {
+	color: #E0E0E0;
+	padding-left: 14px;
+	float: left;
+}
+
+img.one {
+	max-width: 50%;
+        display: block;
+        margin: auto;
+}
+
+#main-container {
+	padding: 15px 20px;
+	max-width: 66%;
+	margin: auto;
+	margin-top: 25px;
+}
+

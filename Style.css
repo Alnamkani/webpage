@@ -1,0 +1,27 @@
+body {
+	font-family: "Courier New", Courier, monospace;
+	margin: 0;
+	/*background-color: yellow;*/
+}
+
+#copyright {
+	color: #767676;
+        font-size: 10pt;
+        margin-top: 42px;
+	/*padding: 15px 20px;*/
+	padding-left: 30px;
+}
+
+a {
+    color: black;
+    font-weight:bold;
+    text-decoration: none;
+}
+
+#main-container {
+	padding: 15px 20px;
+	max-width: 66%;
+	margin: auto;
+	margin-top: 25px;
+}
+
