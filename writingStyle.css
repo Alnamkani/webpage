@@ -7,3 +7,9 @@ h1 {
 h1:hover {
         color: #df5;
 }
+
+a {
+    color: blue;
+    font-weight: normal;
+    text-decoration: underline;
+}
