@@ -1,0 +1,54 @@
+h1 {
+	color: #E0e0e0;
+	padding-left: 14px;
+        float: left;
+}
+
+h1:hover {
+        color: #df5;
+}
+
+a {
+    color: blue;
+    font-weight: normal;
+    text-decoration: underline;
+}
+
+p {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#htwo {
+   float:left;
+}
+
+#date {
+    float: right;
+    font-size = 14px;
+    padding-top: 10px;
+
+}
+ 
+#tandd {
+    height: 60px;
+    margin: 0;
+    padding: 0;
+    display: inline;
+}
+
+@media (max-width: 480px) {
+
+    #tandd {
+        height: 60px;
+        margin: 0;
+        padding: 0;
+        display: block;
+    }
+    #date {
+        float:left;
+        padding-top: 0px;
+    }
+    #htwo {
+        padding-bottom: 0px;
+    }
+}
