@@ -1,34 +1,26 @@
 h1 {
 	color: #E0e0e0;
-        padding-left: 14px;
-        float: left;
+    padding-left: 14px;
+    float: left;
 }
 
 * {
-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 
 .container {
-  position: relative;
-  max-width: 800px;
-  margin: 20px 20px;
-  left: 0px;
-  position: relative;
-  padding: 0px 0px;
+    position: relative;
+    max-width: 800px;
+    margin: 20px 20px;
+    left: 0px;
+    position: relative;
+    padding: 0px 0px;
 }
 
-.container img {vertical-align: middle;}
-
-/*.container .content {
-  position: absolute;
-  bottom: 86px;
-  background: rgb(0, 0, 0); 
-  background: rgba(0, 0, 0, 0.5); 
-  color: #f1f1f1;
-  width: 276px;
-  padding: 20px;
-}*/
+.container img {
+    vertical-align: middle;
+}
 
 h1:hover {
 	color: #df5;
@@ -36,18 +28,14 @@ h1:hover {
 
 img.one {
 	max-width: 100%;
-/*	max-width: 35%;
-	max-height: 50%;
-	display: block;
-	left: 10px;*/
 }
 
 div.container {
-  width: 250px;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  text-align: center;
+    width: 250px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    text-align: center;
 }
 
 div.content {
-  padding: 0px 10px;
+    padding: 0px 10px;
 }

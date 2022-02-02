@@ -1,13 +1,10 @@
 body {
-
 	font-family: Courier New, Courier, monospace !important
 }
 
 #bar {
-
   	background-color: #293250 !important; 
   	position: top !important;
-  
 }
 
 #bar a:hover {
