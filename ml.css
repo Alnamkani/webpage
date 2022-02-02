@@ -1,0 +1,50 @@
+body {
+
+	font-family: Courier New, Courier, monospace !important
+}
+
+#bar {
+
+  	background-color: #293250 !important; 
+  	position: top !important;
+  
+}
+
+#bar a:hover {
+	color: #df5;
+}
+
+#bar h1:hover {
+    color : #df5;
+}
+
+#bar h1 {
+   color : #E0E0E0;
+   font-weight:bold;
+}
+
+#bar a {
+   color : #FFFFFF;
+   font-weight:bold;
+}
+
+#active a {
+    color : #df5 !important;
+}
+
+#button {
+      background-color: #293250;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+#button:hover {
+  color: #df5;
+}
