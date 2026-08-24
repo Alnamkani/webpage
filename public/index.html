@@ -1,48 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
-	<link rel="stylesheet" href="Style.css">
-	<link rel="stylesheet" href="homePage.css">
-    <link rel="stylesheet" href="ml.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-	<meta charset = "utf-8">
-	<title> Mohammed Alnamkani | Home </title>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mohammed Alnamkani</title>
+<meta name="description" content="Personal site of Mohammed Alnamkani, co-founder of SRMED AI. Projects, writing, books, and a resume — served as a desktop.">
+<meta property="og:title" content="Mohammed Alnamkani">
+<meta property="og:description" content="Co-founder of SRMED AI. Projects, writing, books — served as a desktop.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://alnamkani.com">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>◆</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/tokens.css">
+<link rel="stylesheet" href="/css/shell.css">
+<link rel="stylesheet" href="/css/window.css">
+<link rel="stylesheet" href="/css/mobile.css">
 </head>
-
 <body>
 
-     <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="bar">
-        <h1> Mohammed Alnamkani</h1>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" style="color : #df5;" href="#">Home</a>
-                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="writings.html">Writings</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="projects.html" >Projects</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-	<div class="inline" id="main-containerrr">
-		<img class="one" src="Mypic.jpg" alt="Picture of myself">
+<div id="sky"></div>
+<div id="sun"></div>
+<div id="grain"></div>
 
-		<h2 > About Me </h2>
-        <p> I'm a junior studying CS at Purdue University. I enjoy outdoor activities, and reading books. You can find a list of my favorite books <a class="inline" href="blist.html">here</a>. I am interested in machine learning, and deep learning. </p>
-        <p> You can find my contanct information <a href="contact.html" id="inline">here</a>.
+<div id="menubar">
+  <span class="mark">◆</span>
+  <span class="active" id="activeName">Finder</span>
+  <span class="spacer"></span>
+  <button id="skipSky" title="Cycle time of day" aria-label="Cycle time of day">◑</button>
+  <span class="meta" id="clock"></span>
+</div>
 
-        <h2> Job Offers </h2>
-        <p> If you are interested in giving me a job or a research opportunity, please take a look at my <a id="inline" href="resume.pdf">resume</a>. Send me an email at <a id="inline" href="mailto:malnamka@purdue.edu">malnamka@purdue.edu</a>.</p>
-        <p> You can also find me here </p>
-        <p> 
-            <a class="link" style="text-decoration: underline !important;"href="https://www.linkedin.com/in/mohammed-alnamkani-394a78183/">linkedin</a>
-            <a class="link" style="text-decoration: underline !important;"href="https://github.com/Alnamkani">github</a>
-            <a class="link" style="text-decoration: underline !important;" href="https://twitter.com/alnamkani">twitter</a>
-        </p>
-		<p id="copyright">&copy; Mohammed Alnamkani 2022</p>
-	</div>
+<div id="icons"></div>
+<div id="dock"></div>
+<div id="mobile"></div>
+
+<noscript>
+  <div style="position:relative;z-index:5;max-width:620px;margin:0 auto;padding:56px 22px;color:#F2F3F5;font-family:system-ui">
+    <h1>Mohammed Alnamkani</h1>
+    <p>Co-founder of SRMED AI, Jeddah.</p>
+    <p><a href="/resume.pdf" style="color:#E8C07A">Resume</a> ·
+       <a href="mailto:malnamka@purdue.edu" style="color:#E8C07A">Email</a> ·
+       <a href="https://github.com/Alnamkani" style="color:#E8C07A">GitHub</a></p>
+    <p>This site is a small desktop OS — it needs JavaScript.</p>
+  </div>
+</noscript>
+
+<script type="module" src="/js/main.js"></script>
 </body>
 </html>

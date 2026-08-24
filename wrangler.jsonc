@@ -10,5 +10,16 @@
   "assets": {
     "directory": "./public",
     "html_handling": "auto-trailing-slash"
+  },
+  "env": {
+    "preview": {
+      "name": "alnamkani-com-preview",
+      "workers_dev": true,
+      "routes": [],
+      "assets": {
+        "directory": "./public",
+        "html_handling": "auto-trailing-slash"
+      }
+    }
   }
 }
