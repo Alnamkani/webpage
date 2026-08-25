@@ -8,7 +8,7 @@ import { wallApp } from "./apps/wall.js";
 export const ME = {
   name: "Mohammed Alnamkani",
   first: "Mohammed",
-  role: "Co-founder, SRMED AI",
+  role: "CTO & Founder, Srmed AI",
   place: "Jeddah",
   tz: "Asia/Riyadh",
   email: "mohammed.alnamkani@gmail.com",
@@ -24,13 +24,16 @@ export const APPS = [
     html: `
       <img class="portrait" src="/assets/me.jpg" alt="Mohammed Alnamkani" width="84" height="84">
       <h1>${ME.name}</h1>
-      <div class="sub">Co-founder · SRMED AI · ${ME.place}</div>
-      <p>Co-founder of SRMED AI, building AI-powered healthcare.</p>
+      <div class="sub">CTO &amp; Founder · Srmed AI · ${ME.place}</div>
+      <p>CTO and founder of <a href="https://srmed.ai" target="_blank" rel="noopener">Srmed AI</a> —
+      an AI-operated bilingual newsroom. LLM agents collect and rank a
+      thousand headlines a day, publish articles in Arabic and English with
+      their context, and produce a daily two-host AI podcast, end to end.</p>
       <p><em>[Edit me — two or three sentences on what you actually work on
       and why, the way you'd say it out loud at a table.]</em></p>
       <h2>Now</h2>
       <ul>
-        <li>Building SRMED AI.</li>
+        <li>Building Srmed AI.</li>
         <li><em>[Something else you're spending time on.]</em></li>
       </ul>
     `
@@ -42,8 +45,10 @@ export const APPS = [
       <h1>Projects</h1>
       <div class="sub">Selected</div>
       <div class="row">
-        <div><b>SRMED AI</b><p>AI-powered healthcare. Co-founder.</p></div>
-        <span class="when">2024 —</span>
+        <div><b>Srmed AI</b><p>An AI-operated bilingual newsroom — daily news
+        with context and an AI podcast. CTO &amp; founder.
+        <a href="https://srmed.ai" target="_blank" rel="noopener">srmed.ai</a>.</p></div>
+        <span class="when">2026 —</span>
       </div>
       <div class="row">
         <div><b>atat</b>
@@ -153,41 +158,32 @@ export const APPS = [
 
         <h2>Experience</h2>
         <div class="row">
-          <div><b>SRMED AI</b><i>Co-founder</i>
-          <p>AI-powered healthcare.</p></div>
-          <span class="when">2025 —</span>
+          <div><b>Srmed AI</b><i>CTO &amp; Founder · Saudi Arabia</i>
+          <p>Built and shipped an AI-operated bilingual (English/Arabic) newsroom end to end: 1,000+ headlines collected and ranked by LLM agents daily, ~2,000 articles published, and a daily two-host AI podcast with fully automated audio production, served via a Next.js web app and iOS/Android apps. Agentic pipelines with structured tool calls and a self-correcting validation layer; prompts treated as versioned infrastructure with immutable pins and CI promotion; full production deployment on Cloudflare Workers, durable Workflows and Containers with Postgres, edge caching, and cost tracing of every LLM call.</p></div>
+          <span class="when">Jan 2026 —</span>
         </div>
         <div class="row">
-          <div><b>Goldman Sachs</b><i>AWM Engineering Analyst · New York</i>
-          <p>Established connectivity with a counterpart financial institute to enhance company research and leveraged SEC filings for informed analysis. Engineered a natural language interface for a comprehensive dashboard, enabling Portfolio Managers to effectively respond to client queries. Designed and implemented an internal LLM Python SDK.</p></div>
-          <span class="when">Jan – Aug 2024</span>
+          <div><b>Sarj AI</b><i>AI Engineer · Riyadh</i>
+          <p>Built a real-time voice-AI platform letting restaurants take phone calls and orders through conversational agents. Led the team that demonstrated an ambient-AI solution to a hospital, converting the prototype into a continuing engagement; contributed to an AI assistant for a newly launched Saudi digital bank.</p></div>
+          <span class="when">May – Sep 2025</span>
         </div>
         <div class="row">
-          <div><b>Goldman Sachs</b><i>Core Engineering Analyst · New York</i>
-          <p>Developed the generative AI platform offering access to large language models and agent execution orchestration, supporting over 30 use cases. Collaborated with a leading AI firm to fine-tune an LLM on a proprietary programming language. Enhanced an OCR pipeline processing 10k+ documents daily with Metaflow and moved data storage to the cloud with FastAPI.</p></div>
-          <span class="when">Jan 2023 – Jan 2024</span>
-        </div>
-        <div class="row">
-          <div><b>Jareed</b><i>Machine Learning Developer</i>
-          <p>Evaluated product performance for 38,000+ subscribers and shared results using Streamlit.</p></div>
-          <span class="when">Dec 2021 – May 2022</span>
-        </div>
-        <div class="row">
-          <div><b>Oasis Capital</b><i>Financial Analyst</i>
-          <p>Built tooling around Excel data flows and migrated the database from Airtable to Affinity.</p></div>
-          <span class="when">Dec 2021 – Jan 2023</span>
+          <div><b>Goldman Sachs</b><i>AI Engineer (Analyst → Associate) · New York</i>
+          <p>Developed the firm's generative AI platform — LLM access and agent execution orchestration supporting 30+ enterprise use cases. Integrated an external financial institution's research AI agent into advisor workflows for agentic Q&amp;A over counterpart research and SEC filings. Engineered a natural-language interface for Asset &amp; Wealth Management dashboards and designed the internal LLM Python SDK. Collaborated with a leading AI lab to fine-tune an LLM on a proprietary programming language; enhanced an OCR pipeline processing 10k+ documents daily with Metaflow.</p></div>
+          <span class="when">Jan 2023 – Jan 2025</span>
         </div>
 
         <h2>Projects</h2>
         <div class="row">
-          <div><b>Kaggle</b>
-          <p>Fake-review prediction with a recurrent neural network, reaching 94% accuracy. Bank-lending prediction with gradient-boosted trees, top 25% of the leaderboard.</p></div>
+          <div><b>at-at</b>
+          <p>Open-source macOS utility built with Hammerspoon (Lua): type <code>@@</code> in any text field to summon a floating prompt that captures the focused window, queries the Claude Code CLI, and pastes the answer back in place. <a href="${ME.github}/atat" target="_blank" rel="noopener">github.com/Alnamkani/atat</a></p></div>
         </div>
 
         <h2>Education</h2>
         <div class="row">
-          <div><b>King Abdullah University of Science and Technology</b><i>M.S. in Computer Science</i></div>
-          <span class="when">2024 — </span>
+          <div><b>King Abdullah University of Science and Technology</b><i>M.S. in Computer Science</i>
+          <p>GPA 3.5/4.0 · KGSP scholarship recipient (KAUST Gifted Student Program).</p></div>
+          <span class="when">Aug 2024 – Dec 2025</span>
         </div>
         <div class="row">
           <div><b>Purdue University</b><i>B.S. in Computer Science, minor in Economics and Mathematics</i>
@@ -195,14 +191,16 @@ export const APPS = [
           <span class="when">2019 – 2022</span>
         </div>
 
-        <h2>Honors</h2>
-        <div class="row">
-          <div><b>KGSP Scholarship</b>
-          <p>KAUST Gifted Student Program — a funded scholarship program for Saudi students.</p></div>
-        </div>
-
         <h2>Skills</h2>
-        <p>Python, FastAPI, Pandas, Git · Excel, LaTeX, bash</p>
+        <div class="row">
+          <div><b>Programming</b><p>Python, TypeScript/JavaScript, SQL, Bash</p></div>
+        </div>
+        <div class="row">
+          <div><b>AI / LLM</b><p>OpenAI &amp; Gemini APIs, agent orchestration &amp; tool use, evals, prompt versioning, fine-tuning, ElevenLabs, LLM observability</p></div>
+        </div>
+        <div class="row">
+          <div><b>Systems</b><p>FastAPI, Next.js/React, React Native (Expo), PostgreSQL, Cloudflare Workers/Workflows, Terraform, GitHub Actions, Docker, Git</p></div>
+        </div>
       </div>
     `
   },
@@ -210,9 +208,10 @@ export const APPS = [
     id: "srmed", title: "SRMED", img: "/assets/srmed.svg",
     href: "https://srmed.ai",
     html: `
-      <h1>SRMED</h1>
-      <div class="sub">AI-powered healthcare</div>
-      <p><a href="https://srmed.ai" target="_blank" rel="noopener">srmed.ai</a></p>
+      <h1>Srmed</h1>
+      <div class="sub">AI-operated bilingual newsroom</div>
+      <p>Daily business and tech news with context, plus a daily AI podcast —
+      in Arabic and English. <a href="https://srmed.ai" target="_blank" rel="noopener">srmed.ai</a></p>
     `
   },
   {

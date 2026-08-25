@@ -43,33 +43,47 @@ export default {
 
     if (url.pathname === "/api/stocks") {
       const cache = caches.default;
-      const cacheKey = new Request(url.origin + "/api/stocks");
-      const hit = await cache.match(cacheKey);
-      if (hit) return hit;
-      const SYMBOLS = [
-        ["AAPL", "AAPL"],
-        ["NVDA", "NVDA"],
-        ["^GSPC", "S&P 500"],
-        ["BTC-USD", "BTC"]
-      ];
-      const rows = (await Promise.all(SYMBOLS.map(async ([sym, name]) => {
+      const cacheKey = new Request(url.origin + "/api/stocks-cache-v2");
+      if (!url.searchParams.has("debug")) {
+        const hit = await cache.match(cacheKey);
+        if (hit) return hit;
+      }
+      const rows = [];
+      if (env.FINNHUB_KEY) {
+        const quotes = await Promise.all(["AAPL", "NVDA", "SPY"].map(async sym => {
+          try {
+            const q = await (await fetch(
+              `https://finnhub.io/api/v1/quote?symbol=${sym}&token=${env.FINNHUB_KEY}`
+            )).json();
+            if (!q?.c || !q?.pc) return null;
+            return { name: sym, price: q.c, change: (q.c / q.pc - 1) * 100 };
+          } catch {
+            return null;
+          }
+        }));
+        rows.push(...quotes.filter(Boolean));
+      }
+      let debug = null;
+      for (const [pair, name] of [["BTC-USD", "BTC"], ["ETH-USD", "ETH"]]) {
         try {
-          const r = await fetch(
-            `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(sym)}?interval=1d&range=2d`,
-            { headers: { "user-agent": "Mozilla/5.0" } }
-          );
-          const meta = (await r.json())?.chart?.result?.[0]?.meta;
-          if (!meta?.regularMarketPrice || !meta?.chartPreviousClose) return null;
-          return {
-            name,
-            price: meta.regularMarketPrice,
-            change: (meta.regularMarketPrice / meta.chartPreviousClose - 1) * 100
-          };
-        } catch {
-          return null;
+          const r = await fetch(`https://api.exchange.coinbase.com/products/${pair}/stats`, {
+            headers: { "user-agent": "alnamkani.com" }
+          });
+          const text = await r.text();
+          debug = { status: r.status, body: text.slice(0, 160) };
+          const s = JSON.parse(text);
+          const last = parseFloat(s.last), open = parseFloat(s.open);
+          if (isFinite(last) && isFinite(open)) {
+            rows.push({ name, price: last, change: (last / open - 1) * 100 });
+          }
+        } catch (e) {
+          debug = { error: String(e), ...debug };
         }
-      }))).filter(Boolean);
-      const res = Response.json(rows, { headers: { "cache-control": "public, max-age=300" } });
+      }
+      if (url.searchParams.has("debug")) return Response.json({ rows, debug });
+      const res = Response.json(rows, {
+        headers: { "cache-control": rows.length ? "public, max-age=300" : "no-store" }
+      });
       if (rows.length) await cache.put(cacheKey, res.clone());
       return res;
     }
