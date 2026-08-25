@@ -70,6 +70,27 @@ function generate(givens) {
 
 const LEVELS = { easy: 40, medium: 32, hard: 26 };
 
+function solveSteps(board) {
+  const g = [...board];
+  const steps = [];
+  const rec = () => {
+    const i = firstEmpty(g);
+    if (i < 0) return true;
+    for (let v = 1; v <= 9; v++) {
+      if (fits(g, i, v)) {
+        g[i] = v;
+        steps.push({ i, v, back: false });
+        if (rec()) return true;
+        g[i] = 0;
+        steps.push({ i, v: 0, back: true });
+      }
+    }
+    return false;
+  };
+  rec();
+  return steps;
+}
+
 function init(body) {
   const root = body.querySelector(".sudoku");
   const gridEl = root.querySelector(".sk-grid");
@@ -77,7 +98,7 @@ function init(body) {
   const msgEl = root.querySelector(".sk-msg");
   const levelEl = root.querySelector(".sk-level");
 
-  let puzzle, board, given, sel = -1, start, timer, done;
+  let puzzle, board, given, sel = -1, start, timer, done, solving = false, run = 0;
 
   function fmt(s) {
     return String(Math.floor(s / 60)).padStart(2, "0") + ":" + String(s % 60).padStart(2, "0");
@@ -93,6 +114,8 @@ function init(body) {
   }
 
   function newGame() {
+    run++;
+    solving = false;
     ({ puzzle } = generate(LEVELS[levelEl.value]));
     board = [...puzzle];
     given = puzzle.map(v => v !== 0);
@@ -100,8 +123,50 @@ function init(body) {
     done = false;
     msgEl.textContent = "";
     timeEl.textContent = "00:00";
+    root.querySelector(".sk-solve").textContent = "Solve";
     startTimer();
     render();
+  }
+
+  function solve() {
+    if (solving || done) return;
+    solving = true;
+    run++;
+    const myRun = run;
+    sel = -1;
+    board = [...puzzle];
+    const steps = solveSteps(board);
+    const solveBtn = root.querySelector(".sk-solve");
+    solveBtn.textContent = "Solving…";
+    const cells = gridEl.querySelectorAll(".sk-cell");
+    const rate = Math.max(80, Math.min(900, steps.length / 10));
+    let idx = 0, acc = 0, last = performance.now(), tries = 0, backs = 0;
+    const frame = now => {
+      if (run !== myRun || !document.contains(root)) return;
+      acc += (now - last) / 1000 * rate;
+      last = now;
+      let activeCell = -1;
+      const flashed = [];
+      while (acc >= 1 && idx < steps.length) {
+        const s = steps[idx++];
+        board[s.i] = s.v;
+        if (s.back) { backs++; flashed.push(s.i); } else { tries++; activeCell = s.i; }
+        acc--;
+      }
+      render();
+      if (activeCell >= 0) cells[activeCell].classList.add("solving");
+      flashed.forEach(i => cells[i].classList.add("backtrack"));
+      msgEl.textContent = `${tries} placements · ${backs} backtracks`;
+      if (idx < steps.length) requestAnimationFrame(frame);
+      else {
+        solving = false;
+        done = true;
+        solveBtn.textContent = "Solve";
+        render();
+        msgEl.textContent = `Solved: ${tries} placements, ${backs} backtracks.`;
+      }
+    };
+    requestAnimationFrame(frame);
   }
 
   function conflicts() {
@@ -142,7 +207,7 @@ function init(body) {
   }
 
   function input(v) {
-    if (done || sel < 0 || given[sel]) return;
+    if (done || solving || sel < 0 || given[sel]) return;
     board[sel] = v;
     render();
   }
@@ -178,6 +243,7 @@ function init(body) {
   });
 
   root.querySelector(".sk-new").addEventListener("click", newGame);
+  root.querySelector(".sk-solve").addEventListener("click", solve);
   levelEl.addEventListener("change", newGame);
 
   for (let i = 0; i < 81; i++) {
@@ -201,6 +267,7 @@ export const sudokuApp = {
           <option value="hard">Hard</option>
         </select>
         <span class="sk-time">00:00</span>
+        <button class="sk-solve">Solve</button>
         <button class="sk-new">New game</button>
       </div>
       <div class="sk-grid" tabindex="0" aria-label="Sudoku grid"></div>

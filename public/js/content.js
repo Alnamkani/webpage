@@ -1,5 +1,7 @@
 import { sudokuApp } from "./apps/sudoku.js";
 import { deckApp } from "./apps/deck.js";
+import { atatApp } from "./apps/atat.js";
+import { fraudApp } from "./apps/fraudlab.js";
 
 export const ME = {
   name: "Mohammed Alnamkani",
@@ -42,21 +44,31 @@ export const APPS = [
         <span class="when">2024 —</span>
       </div>
       <div class="row">
-        <div><b>Rule-Based Fraud Detection</b>
-        <p>Detecting fraudulent transactions with a rule engine.
-        <a href="#fraud-deck" data-launch="fraud-deck">View the slides</a>.</p></div>
-        <span class="when">slides</span>
+        <div><b>atat</b>
+        <p>Type <code>@@</code> in any Mac text field and Claude answers in
+        place, screenshot attached — Hammerspoon + Claude Code, no API keys.
+        <a href="#atat" data-launch="atat">Try the simulation</a> ·
+        <a href="${ME.github}/atat" target="_blank" rel="noopener">GitHub</a>.</p></div>
+        <span class="when">2026</span>
       </div>
       <div class="row">
-        <div><b>Sudoku</b>
-        <p>Generator with guaranteed-unique puzzles, rebuilt for this site.
-        <a href="#sudoku" data-launch="sudoku">Play it</a>.</p></div>
-        <span class="when">playable</span>
+        <div><b>Rule-Based Fraud Detection</b>
+        <p>An interpretable fraud classifier over millions of transactions.
+        <a href="#fraud-lab" data-launch="fraud-lab">Watch it classify live</a>.</p></div>
+        <span class="when">interactive</span>
+      </div>
+      <div class="row">
+        <div><b>Sudoku Solver</b>
+        <p>Backtracking solver you can watch think.
+        <a href="#sudoku" data-launch="sudoku">Generate and solve</a>.</p></div>
+        <span class="when">animated</span>
       </div>
     `
   },
   sudokuApp,
   deckApp,
+  atatApp,
+  fraudApp,
   {
     id: "writing", title: "Writing", icon: "doc", dock: true,
     w: 560, h: 400,
@@ -214,5 +226,6 @@ export const ICONS = {
   book: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5z"/><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/></svg>`,
   file: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h9l5 5v15H6z"/><path d="M15 2v5h5"/><path d="M9 13h6M9 17h6"/></svg>`,
   game: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/></svg>`,
+  at: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M16 8v5a3 3 0 0 0 6-1 10 10 0 1 0-4 8"/></svg>`,
   chart: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 15v-3M12 15V8M17 15v-5"/></svg>`
 };
