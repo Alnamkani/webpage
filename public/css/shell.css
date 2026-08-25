@@ -109,3 +109,8 @@
 .wg-chg{font-family:var(--mono);font-size:10.5px;width:52px;text-align:right}
 .wg-chg.up{color:#7FD8A4}
 .wg-chg.down{color:#F09A8D}
+
+.icon img{
+  width:36px;height:36px;border-radius:9px;background:#F7F5F1;padding:3px;
+  filter:drop-shadow(0 2px 6px rgba(0,0,0,.45));
+}

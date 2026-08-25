@@ -8,9 +8,11 @@ export function renderDesktop() {
   APPS.filter(a => !a.hidden).forEach(app => {
     const b = document.createElement("button");
     b.className = "icon";
-    b.innerHTML = `${ICONS[app.icon]}<span>${app.title}</span>`;
-    b.addEventListener("dblclick", () => launch(app.id));
-    b.addEventListener("keydown", e => { if (e.key === "Enter") launch(app.id); });
+    const glyph = app.img ? `<img src="${app.img}" alt="" width="36" height="36">` : ICONS[app.icon];
+    b.innerHTML = `${glyph}<span>${app.title}</span>`;
+    const open = () => app.href ? window.open(app.href, "_blank", "noopener") : launch(app.id);
+    b.addEventListener("dblclick", open);
+    b.addEventListener("keydown", e => { if (e.key === "Enter") open(); });
     iconWrap.appendChild(b);
 
     if (app.dock) {

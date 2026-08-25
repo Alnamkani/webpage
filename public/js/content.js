@@ -207,6 +207,15 @@ export const APPS = [
     `
   },
   {
+    id: "srmed", title: "SRMED", img: "/assets/srmed.svg",
+    href: "https://srmed.ai",
+    html: `
+      <h1>SRMED</h1>
+      <div class="sub">AI-powered healthcare</div>
+      <p><a href="https://srmed.ai" target="_blank" rel="noopener">srmed.ai</a></p>
+    `
+  },
+  {
     id: "contact", title: "Contact", icon: "mail", dock: true,
     w: 460, h: 360,
     html: `
