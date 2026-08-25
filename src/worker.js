@@ -50,13 +50,15 @@ export default {
       }
       const rows = [];
       if (env.FINNHUB_KEY) {
-        const quotes = await Promise.all(["AAPL", "NVDA", "SPY"].map(async sym => {
+        const quotes = await Promise.all([
+          ["AAPL", "AAPL"], ["NVDA", "NVDA"], ["SPY", "S&P 500"], ["QQQ", "Nasdaq"]
+        ].map(async ([sym, name]) => {
           try {
             const q = await (await fetch(
               `https://finnhub.io/api/v1/quote?symbol=${sym}&token=${env.FINNHUB_KEY}`
             )).json();
             if (!q?.c || !q?.pc) return null;
-            return { name: sym, price: q.c, change: (q.c / q.pc - 1) * 100 };
+            return { name, price: q.c, change: (q.c / q.pc - 1) * 100 };
           } catch {
             return null;
           }
