@@ -43,27 +43,30 @@ export default {
 
     if (url.pathname === "/api/stocks") {
       const cache = caches.default;
-      const cacheKey = new Request(url.origin + "/api/stocks-cache-v2");
+      const cacheKey = new Request(url.origin + "/api/stocks-cache-v3");
       if (!url.searchParams.has("debug")) {
         const hit = await cache.match(cacheKey);
         if (hit) return hit;
       }
       const rows = [];
+      const fhDebug = { hasKey: Boolean(env.FINNHUB_KEY) };
       if (env.FINNHUB_KEY) {
-        const quotes = await Promise.all([
+        for (const [sym, name] of [
           ["AAPL", "AAPL"], ["NVDA", "NVDA"], ["SPY", "S&P 500"], ["QQQ", "Nasdaq"]
-        ].map(async ([sym, name]) => {
+        ]) {
           try {
-            const q = await (await fetch(
+            const r = await fetch(
               `https://finnhub.io/api/v1/quote?symbol=${sym}&token=${env.FINNHUB_KEY}`
-            )).json();
-            if (!q?.c || !q?.pc) return null;
-            return { name, price: q.c, change: (q.c / q.pc - 1) * 100 };
-          } catch {
-            return null;
+            );
+            const text = await r.text();
+            fhDebug[sym] = { status: r.status, head: text.slice(0, 160) };
+            const q = JSON.parse(text);
+            if (q?.c && q?.pc) rows.push({ name, price: q.c, change: (q.c / q.pc - 1) * 100 });
+          } catch (e) {
+            fhDebug[sym] = { ...fhDebug[sym], error: String(e) };
           }
-        }));
-        rows.push(...quotes.filter(Boolean));
+          await new Promise(ok => setTimeout(ok, 150));
+        }
       }
       let debug = null;
       for (const [pair, name] of [["BTC-USD", "BTC"], ["ETH-USD", "ETH"]]) {
@@ -82,11 +85,15 @@ export default {
           debug = { error: String(e), ...debug };
         }
       }
-      if (url.searchParams.has("debug")) return Response.json({ rows, debug });
+      if (url.searchParams.has("debug")) return Response.json({ rows, debug, fhDebug });
+      const expected = (env.FINNHUB_KEY ? 4 : 0) + 2;
+      const complete = rows.length === expected;
       const res = Response.json(rows, {
-        headers: { "cache-control": rows.length ? "public, max-age=300" : "no-store" }
+        headers: {
+          "cache-control": rows.length ? `public, max-age=${complete ? 300 : 60}` : "no-store"
+        }
       });
-      if (rows.length) await cache.put(cacheKey, res.clone());
+      if (complete) await cache.put(cacheKey, res.clone());
       return res;
     }
 
