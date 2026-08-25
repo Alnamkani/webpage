@@ -1,12 +1,15 @@
-const SIZE = 280;
+const SIZE = 320;
 const COLORS = ["#1A1A1C", "#1B8A9E", "#C23B2E", "#C9A227", "#2E7D4F", "#8A5A9E"];
+const BRUSHES = [3, 7, 14];
+
+const UNDO_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg>`;
+const TRASH_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14M10 11v6M14 11v6"/></svg>`;
 
 function init(body) {
   const root = body.querySelector(".studio");
   const canvas = root.querySelector("canvas");
   const status = root.querySelector(".st-status");
   const saveBtn = root.querySelector(".st-save");
-  const gallery = root.querySelector(".st-gallery");
   const dpr = Math.min(2, window.devicePixelRatio || 1);
   canvas.width = SIZE * dpr;
   canvas.height = SIZE * dpr;
@@ -17,23 +20,17 @@ function init(body) {
   ctx.fillStyle = "#FFFDF8";
   ctx.fillRect(0, 0, SIZE, SIZE);
 
-  let color = COLORS[0], width = 4, drawing = false, strokes = 0, px = 0, py = 0;
+  let color = COLORS[0], width = BRUSHES[0], drawing = false, strokes = 0, px = 0, py = 0;
+  const undoStack = [];
 
-  const swatches = root.querySelectorAll(".st-color");
-  swatches.forEach((b, i) => {
-    b.addEventListener("click", () => {
-      color = COLORS[i];
-      swatches.forEach(s => s.classList.remove("on"));
-      b.classList.add("on");
-    });
-  });
-  root.querySelectorAll(".st-size").forEach(b => {
-    b.addEventListener("click", () => {
-      width = Number(b.dataset.w);
-      root.querySelectorAll(".st-size").forEach(s => s.classList.remove("on"));
-      b.classList.add("on");
-    });
-  });
+  function pick(list, btn) {
+    root.querySelectorAll(list).forEach(b => b.classList.remove("on"));
+    btn.classList.add("on");
+  }
+  root.querySelectorAll(".st-color").forEach((b, i) =>
+    b.addEventListener("click", () => { color = COLORS[i]; pick(".st-color", b); }));
+  root.querySelectorAll(".st-size").forEach((b, i) =>
+    b.addEventListener("click", () => { width = BRUSHES[i]; pick(".st-size", b); }));
 
   function pos(e) {
     const r = canvas.getBoundingClientRect();
@@ -43,6 +40,8 @@ function init(body) {
   canvas.addEventListener("pointerdown", e => {
     drawing = true;
     strokes++;
+    if (undoStack.length >= 20) undoStack.shift();
+    undoStack.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
     canvas.setPointerCapture(e.pointerId);
     [px, py] = pos(e);
     ctx.strokeStyle = color;
@@ -64,7 +63,16 @@ function init(body) {
   });
   canvas.addEventListener("pointerup", () => { drawing = false; });
 
+  root.querySelector(".st-undo").addEventListener("click", () => {
+    const snap = undoStack.pop();
+    if (!snap) return;
+    ctx.putImageData(snap, 0, 0);
+    strokes = Math.max(0, strokes - 1);
+  });
+
   root.querySelector(".st-clear").addEventListener("click", () => {
+    if (undoStack.length >= 20) undoStack.shift();
+    undoStack.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
     ctx.fillStyle = "#FFFDF8";
     ctx.fillRect(0, 0, SIZE, SIZE);
     strokes = 0;
@@ -79,17 +87,6 @@ function init(body) {
     return out.toDataURL("image/png");
   }
 
-  async function loadGallery() {
-    try {
-      const items = await (await fetch("/api/drawings")).json();
-      gallery.innerHTML = items.length
-        ? items.map(d => `<img src="${d}" alt="Visitor drawing" loading="lazy">`).join("")
-        : `<span class="st-empty">Nothing here yet — yours could be first.</span>`;
-    } catch {
-      gallery.innerHTML = `<span class="st-empty">Gallery unavailable.</span>`;
-    }
-  }
-
   saveBtn.addEventListener("click", async () => {
     if (!strokes) { status.textContent = "draw something first"; return; }
     saveBtn.disabled = true;
@@ -98,7 +95,7 @@ function init(body) {
       const res = await fetch("/api/drawings", { method: "POST", body: exportPng() });
       if (res.ok) {
         status.textContent = "on the wall ✓";
-        loadGallery();
+        document.dispatchEvent(new CustomEvent("wall:changed"));
         setTimeout(() => { saveBtn.disabled = false; }, 60000);
       } else {
         status.textContent = await res.text();
@@ -109,36 +106,27 @@ function init(body) {
       saveBtn.disabled = false;
     }
   });
-
-  loadGallery();
 }
 
 export const studioApp = {
   id: "studio", title: "Studio", icon: "brush", dock: true,
-  w: 700, h: 620, init,
+  w: 540, h: 600, init,
   html: `
     <div class="studio">
       <h1>Studio</h1>
-      <div class="sub">Draw something, leave it on the wall</div>
-      <div class="st-flex">
-        <div class="st-left">
-          <canvas style="width:${SIZE}px;height:${SIZE}px" aria-label="Drawing canvas"></canvas>
-          <div class="st-tools">
-            ${COLORS.map((c, i) => `<button class="st-color${i === 0 ? " on" : ""}" style="background:${c}" aria-label="Color ${c}"></button>`).join("")}
-            <span class="st-gap"></span>
-            <button class="st-size on" data-w="4" aria-label="Thin brush"><i style="width:4px;height:4px"></i></button>
-            <button class="st-size" data-w="11" aria-label="Thick brush"><i style="width:11px;height:11px"></i></button>
-            <span class="st-gap"></span>
-            <button class="st-clear">Clear</button>
-            <button class="st-save">Save</button>
-          </div>
-          <div class="st-status" role="status"></div>
-        </div>
-        <div class="st-right">
-          <div class="st-cap">The wall</div>
-          <div class="st-gallery"></div>
-        </div>
+      <div class="sub">Draw something for the wall</div>
+      <canvas style="width:${SIZE}px;height:${SIZE}px" aria-label="Drawing canvas"></canvas>
+      <div class="st-island">
+        ${COLORS.map((c, i) => `<button class="st-btn st-color${i === 0 ? " on" : ""}" aria-label="Color ${c}"><i style="background:${c}"></i></button>`).join("")}
+        <span class="st-div"></span>
+        ${BRUSHES.map((b, i) => `<button class="st-btn st-size${i === 0 ? " on" : ""}" aria-label="Brush ${b}px"><i style="width:${4 + i * 4}px;height:${4 + i * 4}px"></i></button>`).join("")}
+        <span class="st-div"></span>
+        <button class="st-btn st-undo" aria-label="Undo">${UNDO_ICON}</button>
+        <button class="st-btn st-clear" aria-label="Clear canvas">${TRASH_ICON}</button>
+        <button class="st-save">Save</button>
       </div>
+      <div class="st-status" role="status"></div>
+      <div class="st-foot">It goes to <a href="#wall" data-launch="wall">the wall</a> for everyone to see.</div>
     </div>
   `
 };

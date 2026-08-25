@@ -4,7 +4,7 @@ const wins = new Map();
 let z = 100, cascade = 0;
 export let focused = null;
 
-const GEO_KEY = "wm:geo:v1";
+const GEO_KEY = "wm:geo:v2";
 const geo = (() => {
   try { return JSON.parse(localStorage.getItem(GEO_KEY)) || {}; } catch { return {}; }
 })();

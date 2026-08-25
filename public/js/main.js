@@ -1,6 +1,7 @@
 import { APPS } from "./content.js";
 import { launch, close, closeAll, focused } from "./wm.js";
 import { renderDesktop, renderMobile } from "./render.js";
+import { renderWidgets } from "./widgets.js";
 import { startClock, cycleSky } from "./sky.js";
 
 const isMobile = matchMedia("(max-width:820px), (pointer:coarse)").matches;
@@ -31,6 +32,7 @@ renderMobile();
 
 if (!isMobile) {
   renderDesktop();
+  renderWidgets();
 
   loadWeather();
   setInterval(loadWeather, 900000);

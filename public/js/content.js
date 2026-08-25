@@ -3,6 +3,7 @@ import { deckApp } from "./apps/deck.js";
 import { atatApp } from "./apps/atat.js";
 import { fraudApp } from "./apps/fraudlab.js";
 import { studioApp } from "./apps/studio.js";
+import { wallApp } from "./apps/wall.js";
 
 export const ME = {
   name: "Mohammed Alnamkani",
@@ -71,6 +72,7 @@ export const APPS = [
   atatApp,
   fraudApp,
   studioApp,
+  wallApp,
   {
     id: "writing", title: "Writing", icon: "doc", dock: true,
     w: 560, h: 400,
@@ -228,5 +230,6 @@ export const ICONS = {
   game: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/></svg>`,
   at: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M16 8v5a3 3 0 0 0 6-1 10 10 0 1 0-4 8"/></svg>`,
   brush: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3l7 7-8.5 8.5a3.5 3.5 0 0 1-5-5z"/><path d="M7 14l3 3M3 21c1.5 0 3-.5 3-2"/></svg>`,
+  wall: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="8" rx="1"/><rect x="3" y="13" width="8" height="8" rx="1"/><rect x="13" y="13" width="8" height="8" rx="1"/></svg>`,
   chart: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 15v-3M12 15V8M17 15v-5"/></svg>`
 };

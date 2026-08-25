@@ -33,6 +33,39 @@ export default {
       return new Response("method not allowed", { status: 405 });
     }
 
+    if (url.pathname === "/api/stocks") {
+      const cache = caches.default;
+      const cacheKey = new Request(url.origin + "/api/stocks");
+      const hit = await cache.match(cacheKey);
+      if (hit) return hit;
+      const SYMBOLS = [
+        ["AAPL", "AAPL"],
+        ["NVDA", "NVDA"],
+        ["^GSPC", "S&P 500"],
+        ["BTC-USD", "BTC"]
+      ];
+      const rows = (await Promise.all(SYMBOLS.map(async ([sym, name]) => {
+        try {
+          const r = await fetch(
+            `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(sym)}?interval=1d&range=2d`,
+            { headers: { "user-agent": "Mozilla/5.0" } }
+          );
+          const meta = (await r.json())?.chart?.result?.[0]?.meta;
+          if (!meta?.regularMarketPrice || !meta?.chartPreviousClose) return null;
+          return {
+            name,
+            price: meta.regularMarketPrice,
+            change: (meta.regularMarketPrice / meta.chartPreviousClose - 1) * 100
+          };
+        } catch {
+          return null;
+        }
+      }))).filter(Boolean);
+      const res = Response.json(rows, { headers: { "cache-control": "public, max-age=300" } });
+      if (rows.length) await cache.put(cacheKey, res.clone());
+      return res;
+    }
+
     return env.ASSETS.fetch(request);
   }
 };
