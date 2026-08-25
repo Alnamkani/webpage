@@ -67,3 +67,59 @@
 .body .row p{margin:3px 0 0;font-size:15px;color:var(--ink-soft)}
 .body code{font-family:var(--mono);font-size:13.5px;background:#EDE9E1;padding:1.5px 5px;border-radius:4px}
 .body .pdf{width:100%;height:100%;border:0;display:block}
+
+.body{container-type:inline-size}
+.shelfcase{display:flex;flex-direction:column;margin-top:10px}
+.shelf{
+  display:flex;align-items:flex-end;justify-content:center;gap:30px;
+  position:relative;padding:0 14px 10px;margin-bottom:44px;min-height:172px;
+}
+.shelf::after{
+  content:"";position:absolute;left:-10px;right:-10px;bottom:0;height:11px;
+  background:linear-gradient(#CBBFA9,#B3A488);
+  border-radius:2px;
+  box-shadow:0 10px 16px -8px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.4);
+}
+.book{position:relative;display:block;border-bottom:0!important;margin-bottom:11px}
+.book img{
+  height:150px;width:auto;display:block;border-radius:2px 4px 4px 2px;
+  box-shadow:3px 4px 10px rgba(0,0,0,.30);
+  transition:transform .18s ease, box-shadow .18s ease;
+}
+.book::after{
+  content:"";position:absolute;inset:0 0 0 0;border-radius:2px 4px 4px 2px;
+  background:linear-gradient(90deg, rgba(0,0,0,.22), transparent 7%, rgba(255,255,255,.16) 10%, transparent 16%);
+  pointer-events:none;
+}
+.book:hover img,.book:focus-visible img{
+  transform:translateY(-9px) rotate(-1.4deg);
+  box-shadow:5px 12px 20px rgba(0,0,0,.34);
+}
+.book .book-tip{
+  position:absolute;bottom:calc(100% + 10px);left:50%;transform:translateX(-50%);
+  background:var(--ink);color:var(--pane);font-family:var(--ui);font-size:11.5px;
+  padding:4px 10px;border-radius:6px;white-space:nowrap;
+  opacity:0;pointer-events:none;transition:opacity .15s;z-index:6;
+}
+.book:hover .book-tip,.book:focus-visible .book-tip{opacity:1}
+@container (max-width:480px){
+  .book img{height:112px}
+  .shelf{gap:18px;min-height:132px;margin-bottom:36px}
+}
+
+.cv .cv-head{margin-bottom:8px}
+.cv .cv-links{
+  font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);
+  margin:6px 0 10px;letter-spacing:.01em;
+}
+.cv h2{
+  border-bottom:1px solid var(--hair);padding-bottom:5px;
+  text-transform:uppercase;letter-spacing:.07em;font-size:12.5px;color:var(--accent);
+}
+.cv .row{border-bottom:0;padding:10px 0}
+.cv .row i{
+  display:block;font-family:var(--mono);font-style:normal;font-size:11px;
+  letter-spacing:.04em;text-transform:uppercase;color:var(--ink-soft);margin-top:2px;
+}
+.cv .row p{margin-top:6px}
+

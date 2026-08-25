@@ -4,7 +4,7 @@ export const ME = {
   role: "Co-founder, SRMED AI",
   place: "Jeddah",
   tz: "Asia/Riyadh",
-  email: "malnamka@purdue.edu",
+  email: "mohammed.alnamkani@gmail.com",
   github: "https://github.com/Alnamkani",
   x: "https://twitter.com/alnamkani",
   linkedin: "https://www.linkedin.com/in/mohammed-alnamkani-394a78183/"
@@ -85,24 +85,105 @@ export const APPS = [
   },
   {
     id: "library", title: "Library", icon: "book", dock: true,
-    w: 520, h: 440,
+    w: 600, h: 560,
     html: `
       <h1>Library</h1>
       <div class="sub">Favorite books</div>
-      <ul>
-        <li><a href="https://g.co/kgs/z4DosK" target="_blank" rel="noopener">Zero to One</a> — Peter Thiel</li>
-        <li><a href="https://g.co/kgs/9ZZqpB" target="_blank" rel="noopener">Hackers &amp; Painters</a> — Paul Graham</li>
-        <li><a href="https://g.co/kgs/8GTsXY" target="_blank" rel="noopener">Skin in the Game</a> — Nassim Taleb</li>
-        <li><a href="https://g.co/kgs/26RYAt" target="_blank" rel="noopener">Range</a> — David Epstein</li>
-        <li><a href="https://g.co/kgs/Fp6C2K" target="_blank" rel="noopener">Animal Farm</a> — George Orwell</li>
-        <li><a href="https://g.co/kgs/sKbDsC" target="_blank" rel="noopener">Radical Markets</a> — Posner &amp; Weyl</li>
-      </ul>
+      <div class="shelfcase">
+        <div class="shelf">
+          <a class="book" href="https://g.co/kgs/z4DosK" target="_blank" rel="noopener">
+            <img src="/assets/books/zero-to-one.jpg" alt="Zero to One" loading="lazy">
+            <span class="book-tip">Zero to One — Peter Thiel</span></a>
+          <a class="book" href="https://g.co/kgs/9ZZqpB" target="_blank" rel="noopener">
+            <img src="/assets/books/hackers-painters.jpg" alt="Hackers and Painters" loading="lazy">
+            <span class="book-tip">Hackers &amp; Painters — Paul Graham</span></a>
+          <a class="book" href="https://g.co/kgs/8GTsXY" target="_blank" rel="noopener">
+            <img src="/assets/books/skin-in-the-game.jpg" alt="Skin in the Game" loading="lazy">
+            <span class="book-tip">Skin in the Game — Nassim Taleb</span></a>
+        </div>
+        <div class="shelf">
+          <a class="book" href="https://g.co/kgs/26RYAt" target="_blank" rel="noopener">
+            <img src="/assets/books/range.jpg" alt="Range" loading="lazy">
+            <span class="book-tip">Range — David Epstein</span></a>
+          <a class="book" href="https://g.co/kgs/Fp6C2K" target="_blank" rel="noopener">
+            <img src="/assets/books/animal-farm.jpg" alt="Animal Farm" loading="lazy">
+            <span class="book-tip">Animal Farm — George Orwell</span></a>
+          <a class="book" href="https://g.co/kgs/sKbDsC" target="_blank" rel="noopener">
+            <img src="/assets/books/radical-markets.jpg" alt="Radical Markets" loading="lazy">
+            <span class="book-tip">Radical Markets — Posner &amp; Weyl</span></a>
+        </div>
+      </div>
     `
   },
   {
-    id: "resume", title: "Resume.pdf", icon: "file", dock: true,
-    w: 720, h: 640, plain: true,
-    html: `<iframe class="pdf" src="/resume.pdf" title="Resume of ${ME.name}"></iframe>`
+    id: "resume", title: "Resume", icon: "file", dock: true,
+    w: 700, h: 660,
+    html: `
+      <div class="cv">
+        <div class="cv-head">
+          <h1>${ME.name}</h1>
+          <div class="cv-links">
+            <a href="mailto:${ME.email}">${ME.email}</a> ·
+            <a href="https://alnamkani.com">alnamkani.com</a> ·
+            <a href="${ME.github}" target="_blank" rel="noopener">github.com/Alnamkani</a> ·
+            <a href="/resume.pdf" download>PDF ↓</a>
+          </div>
+        </div>
+
+        <h2>Experience</h2>
+        <div class="row">
+          <div><b>SRMED AI</b><i>Co-founder</i>
+          <p>AI-powered healthcare.</p></div>
+          <span class="when">2025 —</span>
+        </div>
+        <div class="row">
+          <div><b>Goldman Sachs</b><i>AWM Engineering Analyst · New York</i>
+          <p>Established connectivity with a counterpart financial institute to enhance company research and leveraged SEC filings for informed analysis. Engineered a natural language interface for a comprehensive dashboard, enabling Portfolio Managers to effectively respond to client queries. Designed and implemented an internal LLM Python SDK.</p></div>
+          <span class="when">Jan – Aug 2024</span>
+        </div>
+        <div class="row">
+          <div><b>Goldman Sachs</b><i>Core Engineering Analyst · New York</i>
+          <p>Developed the generative AI platform offering access to large language models and agent execution orchestration, supporting over 30 use cases. Collaborated with a leading AI firm to fine-tune an LLM on a proprietary programming language. Enhanced an OCR pipeline processing 10k+ documents daily with Metaflow and moved data storage to the cloud with FastAPI.</p></div>
+          <span class="when">Jan 2023 – Jan 2024</span>
+        </div>
+        <div class="row">
+          <div><b>Jareed</b><i>Machine Learning Developer</i>
+          <p>Evaluated product performance for 38,000+ subscribers and shared results using Streamlit.</p></div>
+          <span class="when">Dec 2021 – May 2022</span>
+        </div>
+        <div class="row">
+          <div><b>Oasis Capital</b><i>Financial Analyst</i>
+          <p>Built tooling around Excel data flows and migrated the database from Airtable to Affinity.</p></div>
+          <span class="when">Dec 2021 – Jan 2023</span>
+        </div>
+
+        <h2>Projects</h2>
+        <div class="row">
+          <div><b>Kaggle</b>
+          <p>Fake-review prediction with a recurrent neural network, reaching 94% accuracy. Bank-lending prediction with gradient-boosted trees, top 25% of the leaderboard.</p></div>
+        </div>
+
+        <h2>Education</h2>
+        <div class="row">
+          <div><b>King Abdullah University of Science and Technology</b><i>M.S. in Computer Science</i></div>
+          <span class="when">2024 — </span>
+        </div>
+        <div class="row">
+          <div><b>Purdue University</b><i>B.S. in Computer Science, minor in Economics and Mathematics</i>
+          <p>GPA 3.86/4.0 · Dean's List and Semester Honors, all semesters.</p></div>
+          <span class="when">2019 – 2022</span>
+        </div>
+
+        <h2>Honors</h2>
+        <div class="row">
+          <div><b>KGSP Scholarship</b>
+          <p>KAUST Gifted Student Program — a funded scholarship program for Saudi students.</p></div>
+        </div>
+
+        <h2>Skills</h2>
+        <p>Python, FastAPI, Pandas, Git · Excel, LaTeX, bash</p>
+      </div>
+    `
   },
   {
     id: "contact", title: "Contact", icon: "mail", dock: true,
