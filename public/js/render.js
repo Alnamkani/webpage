@@ -36,7 +36,8 @@ export function renderDesktop() {
 }
 
 export function renderMobile() {
-  document.getElementById("mobile").innerHTML = `
+  const mob = document.getElementById("mobile");
+  mob.innerHTML = `
     <header>
       <h1>${ME.name}</h1>
       <div class="sub">${ME.role} · ${ME.place}</div>
@@ -45,4 +46,8 @@ export function renderMobile() {
       <section id="m-${a.id}"><div class="cap">${a.title}</div><div class="body">${a.html}</div></section>
     `).join("")}
     <footer>Open on a desktop for the full experience.</footer>`;
+
+  if (matchMedia("(max-width:820px), (pointer:coarse)").matches) {
+    APPS.filter(a => a.init).forEach(a => a.init(mob.querySelector(`#m-${a.id} .body`)));
+  }
 }

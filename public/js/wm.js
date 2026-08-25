@@ -74,6 +74,7 @@ export function launch(id) {
 
   document.body.appendChild(el);
   wins.set(id, { el, prev: null });
+  if (app.init) app.init(el.querySelector(".body"));
   focus(id);
 
   el.addEventListener("pointerdown", () => focus(id), true);

@@ -1,3 +1,6 @@
+import { sudokuApp } from "./apps/sudoku.js";
+import { deckApp } from "./apps/deck.js";
+
 export const ME = {
   name: "Mohammed Alnamkani",
   first: "Mohammed",
@@ -41,15 +44,19 @@ export const APPS = [
       <div class="row">
         <div><b>Rule-Based Fraud Detection</b>
         <p>Detecting fraudulent transactions with a rule engine.
-        <a href="/assets/fraud-detection.pdf" target="_blank" rel="noopener">Open the deck</a>.</p></div>
+        <a href="#fraud-deck" data-launch="fraud-deck">View the slides</a>.</p></div>
         <span class="when">slides</span>
       </div>
       <div class="row">
-        <div><b>Sudoku</b><p>Playable rebuild coming to this window.</p></div>
-        <span class="when">soon</span>
+        <div><b>Sudoku</b>
+        <p>Generator with guaranteed-unique puzzles, rebuilt for this site.
+        <a href="#sudoku" data-launch="sudoku">Play it</a>.</p></div>
+        <span class="when">playable</span>
       </div>
     `
   },
+  sudokuApp,
+  deckApp,
   {
     id: "writing", title: "Writing", icon: "doc", dock: true,
     w: 560, h: 400,
@@ -205,5 +212,7 @@ export const ICONS = {
   doc: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>`,
   mail: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 7 8.5 6 8.5-6"/></svg>`,
   book: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5z"/><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/></svg>`,
-  file: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h9l5 5v15H6z"/><path d="M15 2v5h5"/><path d="M9 13h6M9 17h6"/></svg>`
+  file: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h9l5 5v15H6z"/><path d="M15 2v5h5"/><path d="M9 13h6M9 17h6"/></svg>`,
+  game: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/></svg>`,
+  chart: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 15v-3M12 15V8M17 15v-5"/></svg>`
 };
