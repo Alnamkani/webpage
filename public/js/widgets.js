@@ -1,4 +1,5 @@
 import { launch } from "./wm.js";
+import { captionOf } from "./apps/wall.js";
 
 function fmtPrice(p) {
   return p >= 1000 ? Math.round(p).toLocaleString("en-US") : p.toFixed(2);
@@ -25,7 +26,7 @@ export function renderWidgets() {
     try {
       const items = await (await fetch("/api/drawings")).json();
       host.querySelector(".wg-grid").innerHTML = items.length
-        ? items.slice(0, 6).map(d => `<img src="${d}" alt="">`).join("")
+        ? items.slice(0, 6).map(d => `<img src="${d.img}" alt="" title="${captionOf(d)}">`).join("")
         : `<span class="wg-note">be the first to draw</span>`;
     } catch {}
   }

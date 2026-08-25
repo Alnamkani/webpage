@@ -14,7 +14,10 @@ export default {
       if (request.method === "GET") {
         const list = await env.DRAWINGS.list({ prefix: "d:", limit: 48 });
         const items = await Promise.all(list.keys.map(k => env.DRAWINGS.get(k.name)));
-        return Response.json(items.filter(Boolean));
+        return Response.json(items.filter(Boolean).map(v => {
+          if (v.startsWith("data:")) return { img: v, city: null, country: null, ts: null };
+          try { return JSON.parse(v); } catch { return null; }
+        }).filter(Boolean));
       }
       if (request.method === "POST") {
         const ip = request.headers.get("cf-connecting-ip") || "unknown";
@@ -26,7 +29,12 @@ export default {
           return new Response("bad drawing", { status: 400 });
         }
         const key = "d:" + String(1e13 - Date.now()) + ":" + Math.random().toString(36).slice(2, 8);
-        await env.DRAWINGS.put(key, body);
+        await env.DRAWINGS.put(key, JSON.stringify({
+          img: body,
+          city: request.cf?.city || null,
+          country: request.cf?.country || null,
+          ts: Date.now()
+        }));
         await env.DRAWINGS.put("ip:" + ip, "1", { expirationTtl: 60 });
         return Response.json({ ok: true });
       }
