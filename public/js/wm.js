@@ -75,6 +75,7 @@ export function launch(id) {
   document.body.appendChild(el);
   wins.set(id, { el, prev: null });
   if (app.init) app.init(el.querySelector(".body"));
+  if (!(saved && saved.width) && !app.plain) fitToContent(el, app);
   focus(id);
 
   el.addEventListener("pointerdown", () => focus(id), true);
@@ -87,6 +88,18 @@ export function launch(id) {
   el.querySelector(".l-max").addEventListener("click", e => { e.stopPropagation(); toggleMax(id); });
   drag(el, el.querySelector(".bar"), id);
   resize(el, el.querySelector(".rz"), id);
+}
+
+function fitToContent(el, app) {
+  const dockH = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--dock-h")) || 76;
+  const top0 = barH();
+  const avail = window.innerHeight - top0 - dockH - 16;
+  const bodyEl = el.querySelector(".body");
+  const need = bodyEl.scrollHeight + 34 + 10;
+  const h = Math.min(Math.max(need, 220), avail);
+  el.style.height = h + "px";
+  const off = parseFloat(el.style.top) - Math.max(top0 + 12, (window.innerHeight - Math.min(app.h, window.innerHeight - 130)) / 2 - 40);
+  el.style.top = Math.max(top0 + 8, top0 + (avail - h) / 2 + off) + "px";
 }
 
 function clampToViewport(el, saved) {
