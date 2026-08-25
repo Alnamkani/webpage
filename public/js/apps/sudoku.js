@@ -56,7 +56,6 @@ function countSolutions(g, cap) {
 function generate(givens) {
   const g = Array(81).fill(0);
   fill(g);
-  const solution = [...g];
   let removed = 0;
   for (const i of shuffled([...Array(81).keys()])) {
     if (removed >= 81 - givens) break;
@@ -65,10 +64,8 @@ function generate(givens) {
     if (countSolutions([...g], 2) !== 1) g[i] = keep;
     else removed++;
   }
-  return { puzzle: g, solution };
+  return g;
 }
-
-const LEVELS = { easy: 40, medium: 32, hard: 26 };
 
 function solveSteps(board) {
   const g = [...board];
@@ -94,49 +91,36 @@ function solveSteps(board) {
 function init(body) {
   const root = body.querySelector(".sudoku");
   const gridEl = root.querySelector(".sk-grid");
-  const timeEl = root.querySelector(".sk-time");
   const msgEl = root.querySelector(".sk-msg");
-  const levelEl = root.querySelector(".sk-level");
+  const solveBtn = root.querySelector(".sk-solve");
+  let puzzle, board, given, solving = false, solved = false, run = 0;
 
-  let puzzle, board, given, sel = -1, start, timer, done, solving = false, run = 0;
-
-  function fmt(s) {
-    return String(Math.floor(s / 60)).padStart(2, "0") + ":" + String(s % 60).padStart(2, "0");
-  }
-
-  function startTimer() {
-    clearInterval(timer);
-    start = Date.now();
-    timer = setInterval(() => {
-      if (!document.contains(root)) { clearInterval(timer); return; }
-      if (!done) timeEl.textContent = fmt(Math.floor((Date.now() - start) / 1000));
-    }, 1000);
+  function render() {
+    gridEl.querySelectorAll(".sk-cell").forEach((cell, i) => {
+      cell.textContent = board[i] || "";
+      cell.className = "sk-cell" + (given[i] ? " given" : "");
+    });
   }
 
   function newGame() {
     run++;
     solving = false;
-    ({ puzzle } = generate(LEVELS[levelEl.value]));
+    solved = false;
+    puzzle = generate(32);
     board = [...puzzle];
     given = puzzle.map(v => v !== 0);
-    sel = -1;
-    done = false;
     msgEl.textContent = "";
-    timeEl.textContent = "00:00";
-    root.querySelector(".sk-solve").textContent = "Solve";
-    startTimer();
+    solveBtn.textContent = "Solve";
     render();
   }
 
   function solve() {
-    if (solving || done) return;
+    if (solving || solved) return;
     solving = true;
     run++;
     const myRun = run;
-    sel = -1;
     board = [...puzzle];
     const steps = solveSteps(board);
-    const solveBtn = root.querySelector(".sk-solve");
     solveBtn.textContent = "Solving…";
     const cells = gridEl.querySelectorAll(".sk-cell");
     const rate = Math.max(80, Math.min(900, steps.length / 10));
@@ -160,7 +144,7 @@ function init(body) {
       if (idx < steps.length) requestAnimationFrame(frame);
       else {
         solving = false;
-        done = true;
+        solved = true;
         solveBtn.textContent = "Solve";
         render();
         msgEl.textContent = `Solved: ${tries} placements, ${backs} backtracks.`;
@@ -169,113 +153,30 @@ function init(body) {
     requestAnimationFrame(frame);
   }
 
-  function conflicts() {
-    const bad = new Set();
-    for (let i = 0; i < 81; i++) {
-      const v = board[i];
-      if (!v) continue;
-      const r = Math.floor(i / 9), c = i % 9, br = r - r % 3, bc = c - c % 3;
-      for (let k = 0; k < 9; k++) {
-        const peers = [r * 9 + k, k * 9 + c, (br + Math.floor(k / 3)) * 9 + bc + k % 3];
-        for (const p of peers) if (p !== i && board[p] === v) { bad.add(i); bad.add(p); }
-      }
-    }
-    return bad;
-  }
-
-  function render() {
-    const bad = conflicts();
-    const selVal = sel >= 0 ? board[sel] : 0;
-    gridEl.querySelectorAll(".sk-cell").forEach((cell, i) => {
-      const v = board[i];
-      cell.textContent = v || "";
-      cell.className = "sk-cell";
-      if (given[i]) cell.classList.add("given");
-      if (i === sel) cell.classList.add("sel");
-      else if (sel >= 0) {
-        const r = Math.floor(i / 9), sr = Math.floor(sel / 9);
-        const sameBox = Math.floor(r / 3) === Math.floor(sr / 3) && Math.floor(i % 9 / 3) === Math.floor(sel % 9 / 3);
-        if (r === sr || i % 9 === sel % 9 || sameBox) cell.classList.add("peer");
-      }
-      if (v && v === selVal && i !== sel) cell.classList.add("same");
-      if (bad.has(i)) cell.classList.add("bad");
-    });
-    if (!done && firstEmpty(board) < 0 && bad.size === 0) {
-      done = true;
-      msgEl.textContent = "Solved in " + timeEl.textContent + " — nice.";
-    }
-  }
-
-  function input(v) {
-    if (done || solving || sel < 0 || given[sel]) return;
-    board[sel] = v;
-    render();
-  }
-
-  gridEl.addEventListener("pointerdown", e => {
-    const cell = e.target.closest(".sk-cell");
-    if (!cell) return;
-    sel = Number(cell.dataset.i);
-    gridEl.focus();
-    render();
-    e.preventDefault();
-  });
-
-  gridEl.addEventListener("keydown", e => {
-    if (e.key >= "1" && e.key <= "9") { input(Number(e.key)); e.preventDefault(); }
-    else if (e.key === "Backspace" || e.key === "Delete" || e.key === "0") { input(0); e.preventDefault(); }
-    else if (e.key.startsWith("Arrow")) {
-      if (sel < 0) sel = 0;
-      else if (e.key === "ArrowUp" && sel > 8) sel -= 9;
-      else if (e.key === "ArrowDown" && sel < 72) sel += 9;
-      else if (e.key === "ArrowLeft" && sel % 9 > 0) sel -= 1;
-      else if (e.key === "ArrowRight" && sel % 9 < 8) sel += 1;
-      render();
-      e.preventDefault();
-    }
-  });
-
-  root.querySelector(".sk-pad").addEventListener("click", e => {
-    const b = e.target.closest("button");
-    if (!b) return;
-    input(Number(b.dataset.v));
-    gridEl.focus();
-  });
-
   root.querySelector(".sk-new").addEventListener("click", newGame);
-  root.querySelector(".sk-solve").addEventListener("click", solve);
-  levelEl.addEventListener("change", newGame);
+  solveBtn.addEventListener("click", solve);
 
   for (let i = 0; i < 81; i++) {
     const cell = document.createElement("div");
     cell.className = "sk-cell";
-    cell.dataset.i = i;
     gridEl.appendChild(cell);
   }
   newGame();
 }
 
 export const sudokuApp = {
-  id: "sudoku", title: "Sudoku", icon: "game", dock: false,
-  w: 470, h: 660, init,
+  id: "sudoku", title: "Sudoku Solver", icon: "game", dock: false,
+  w: 470, h: 600, init,
   html: `
     <div class="sudoku">
       <div class="sk-top">
-        <select class="sk-level" aria-label="Difficulty">
-          <option value="easy">Easy</option>
-          <option value="medium" selected>Medium</option>
-          <option value="hard">Hard</option>
-        </select>
-        <span class="sk-time">00:00</span>
+        <button class="sk-new">Generate</button>
+        <span class="sk-msg" role="status"></span>
         <button class="sk-solve">Solve</button>
-        <button class="sk-new">New game</button>
       </div>
-      <div class="sk-grid" tabindex="0" aria-label="Sudoku grid"></div>
-      <div class="sk-pad">
-        ${[1, 2, 3, 4, 5, 6, 7, 8, 9].map(n => `<button data-v="${n}">${n}</button>`).join("")}
-        <button data-v="0" class="sk-erase">⌫</button>
-      </div>
-      <div class="sk-msg" role="status"></div>
+      <div class="sk-grid" aria-label="Sudoku grid"></div>
+      <p class="sk-note">Watch the backtracking search think — every placement
+      and retreat, live.</p>
     </div>
   `
 };

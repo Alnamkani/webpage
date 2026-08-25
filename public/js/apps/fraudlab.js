@@ -14,15 +14,15 @@ function makeTx() {
   if (isFraud) {
     return {
       fraud: true,
-      r7: 0.35 + Math.random() * 0.65,
+      r7: 0.45 + Math.random() * 0.55,
       amount: Math.round(150 + Math.random() * 1850),
-      r30: 0.45 + Math.random() * 0.55
+      r30: 0.3 + Math.random() * 0.7
     };
   }
   return {
     fraud: false,
-    r7: Math.random() * 0.6,
-    amount: Math.round(5 + Math.random() * 400),
+    r7: Math.random() * 0.5,
+    amount: Math.round(5 + Math.random() * 260),
     r30: Math.random() * 0.55
   };
 }
@@ -35,9 +35,9 @@ function classify(tx, t) {
 function init(body) {
   const root = body.querySelector(".flab");
   const svg = root.querySelector("svg");
-  const dot = svg.querySelector(".fl-dot");
+  const pulseLayer = svg.querySelector(".fl-pulses");
   const txEl = root.querySelector(".fl-tx");
-  const stats = { seen: 0, flagged: 0, caught: 0, missed: 0, falarm: 0 };
+  const stats = { seen: 0, caught: 0, missed: 0, falarm: 0 };
   const t = { r7: 0.551, amount: 218.67, r30: 0.662 };
   let running = true;
 
@@ -62,7 +62,6 @@ function init(body) {
   pauseBtn.addEventListener("click", () => {
     running = !running;
     pauseBtn.textContent = running ? "Pause" : "Resume";
-    if (running) loop();
   });
 
   function setStats() {
@@ -72,55 +71,62 @@ function init(body) {
     statEls.falarm.textContent = stats.falarm;
   }
 
-  function animate(path, tx, cb) {
-    const pts = path.map(k => NODES[k]);
-    const segT = 520;
-    const startT = performance.now();
-    const total = segT * (pts.length - 1);
-    dot.setAttribute("cx", pts[0].x);
-    dot.setAttribute("cy", pts[0].y);
-    dot.style.opacity = 1;
-    dot.classList.toggle("fraud", tx.fraud);
+  function lightNode(key, cls) {
+    const g = svg.querySelector(`.fl-g-${key}`);
+    if (!g) return;
+    g.classList.add("lit", cls);
+    setTimeout(() => g.classList.remove("lit", cls), 460);
+  }
+
+  function pulseEdge(a, b, cls, dur, done) {
+    const A = NODES[a], B = NODES[b];
+    const len = Math.hypot(B.x - A.x, B.y - A.y);
+    const dash = 26;
+    const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    line.setAttribute("x1", A.x); line.setAttribute("y1", A.y);
+    line.setAttribute("x2", B.x); line.setAttribute("y2", B.y);
+    line.setAttribute("class", `fl-pulse ${cls}`);
+    line.setAttribute("stroke-dasharray", `${dash} ${len + dash}`);
+    line.setAttribute("stroke-dashoffset", dash);
+    pulseLayer.appendChild(line);
+    const t0 = performance.now();
     const frame = now => {
-      if (!document.contains(root)) return;
-      const el = Math.min(total, now - startT);
-      const seg = Math.min(pts.length - 2, Math.floor(el / segT));
-      const f = el / segT - seg;
-      const e = f * f * (3 - 2 * f);
-      const x = pts[seg].x + (pts[seg + 1].x - pts[seg].x) * e;
-      const y = pts[seg].y + (pts[seg + 1].y - pts[seg].y) * e;
-      dot.setAttribute("cx", x);
-      dot.setAttribute("cy", y);
-      if (el < total) requestAnimationFrame(frame);
-      else cb();
+      if (!document.contains(root)) { line.remove(); return; }
+      const p = Math.min(1, (now - t0) / dur);
+      const e = p < .5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+      line.setAttribute("stroke-dashoffset", dash - e * (len + dash));
+      if (p < 1) requestAnimationFrame(frame);
+      else { line.remove(); done(); }
     };
     requestAnimationFrame(frame);
   }
 
-  function loop() {
-    if (!running || !document.contains(root)) return;
+  function spawn() {
     const tx = makeTx();
+    const cls = tx.fraud ? "p-fraud" : "p-ok";
     txEl.innerHTML = `$${tx.amount} · risk7 ${tx.r7.toFixed(2)} · risk30 ${tx.r30.toFixed(2)}` +
       (tx.fraud ? ` <span class="is-fraud">fraud</span>` : ` <span class="is-ok">legit</span>`);
-    const path = classify(tx, t);
-    const leafKey = path[2];
+    const [n0, n1, leafKey] = classify(tx, t);
     const flagged = NODES[leafKey].fraud;
-    animate(path, tx, () => {
-      stats.seen++;
-      if (flagged) stats.flagged++;
-      if (tx.fraud && flagged) stats.caught++;
-      if (tx.fraud && !flagged) stats.missed++;
-      if (!tx.fraud && flagged) stats.falarm++;
-      setStats();
-      const leaf = svg.querySelector(`.fl-leaf-${leafKey}`);
-      leaf.classList.add("hit");
-      setTimeout(() => leaf.classList.remove("hit"), 380);
-      dot.style.opacity = 0;
-      setTimeout(loop, 320);
+    lightNode(n0, cls);
+    pulseEdge(n0, n1, cls, 430, () => {
+      lightNode(n1, cls);
+      pulseEdge(n1, leafKey, cls, 430, () => {
+        stats.seen++;
+        if (tx.fraud && flagged) stats.caught++;
+        if (tx.fraud && !flagged) stats.missed++;
+        if (!tx.fraud && flagged) stats.falarm++;
+        setStats();
+        lightNode(leafKey, cls);
+      });
     });
   }
 
-  loop();
+  const feeder = setInterval(() => {
+    if (!document.contains(root)) { clearInterval(feeder); return; }
+    if (running) spawn();
+  }, 1050);
+  spawn();
 }
 
 function edge(a, b) {
@@ -129,7 +135,7 @@ function edge(a, b) {
 
 function node(k, sub) {
   const n = NODES[k];
-  return `<g transform="translate(${n.x},${n.y})">
+  return `<g class="fl-g-${k}" transform="translate(${n.x},${n.y})">
     <rect x="-78" y="-22" width="156" height="44" rx="8" class="fl-node"/>
     <text y="-4" class="fl-label">${n.label}</text>
     <text y="13" class="fl-th fl-th-${sub.k}">≤ ${sub.v}</text>
@@ -138,8 +144,8 @@ function node(k, sub) {
 
 function leaf(k, txt) {
   const n = NODES[k];
-  return `<g transform="translate(${n.x},${n.y})">
-    <rect x="-56" y="-20" width="112" height="40" rx="9" class="fl-leaf fl-leaf-${k} ${NODES[k].fraud ? "bad" : "good"}"/>
+  return `<g class="fl-g-${k}" transform="translate(${n.x},${n.y})">
+    <rect x="-56" y="-20" width="112" height="40" rx="9" class="fl-leaf ${NODES[k].fraud ? "bad" : "good"}"/>
     <text y="5" class="fl-leaftext">${txt}</text>
   </g>`;
 }
@@ -161,12 +167,12 @@ export const fraudApp = {
         ${edge("root", "amount")}${edge("root", "risk30")}
         ${edge("amount", "l1")}${edge("amount", "l2")}
         ${edge("risk30", "l3")}${edge("risk30", "l4")}
+        <g class="fl-pulses"></g>
         ${node("root", { k: "r7", v: 0.551 })}
         ${node("amount", { k: "amount", v: "$218.67" })}
         ${node("risk30", { k: "r30", v: 0.662 })}
         ${leaf("l1", "pass")}${leaf("l2", "flag")}
         ${leaf("l3", "flag")}${leaf("l4", "pass")}
-        <circle class="fl-dot" r="7" cx="${NODES.root.x}" cy="${NODES.root.y}" opacity="0"/>
       </svg>
       <div class="fl-stats">
         <div><span class="fs-seen">0</span><i>seen</i></div>
