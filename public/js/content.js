@@ -2,6 +2,7 @@ import { sudokuApp } from "./apps/sudoku.js";
 import { deckApp } from "./apps/deck.js";
 import { atatApp } from "./apps/atat.js";
 import { fraudApp } from "./apps/fraudlab.js";
+import { studioApp } from "./apps/studio.js";
 
 export const ME = {
   name: "Mohammed Alnamkani",
@@ -69,6 +70,7 @@ export const APPS = [
   deckApp,
   atatApp,
   fraudApp,
+  studioApp,
   {
     id: "writing", title: "Writing", icon: "doc", dock: true,
     w: 560, h: 400,
@@ -225,5 +227,6 @@ export const ICONS = {
   file: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h9l5 5v15H6z"/><path d="M15 2v5h5"/><path d="M9 13h6M9 17h6"/></svg>`,
   game: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/></svg>`,
   at: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M16 8v5a3 3 0 0 0 6-1 10 10 0 1 0-4 8"/></svg>`,
+  brush: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3l7 7-8.5 8.5a3.5 3.5 0 0 1-5-5z"/><path d="M7 14l3 3M3 21c1.5 0 3-.5 3-2"/></svg>`,
   chart: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 15v-3M12 15V8M17 15v-5"/></svg>`
 };

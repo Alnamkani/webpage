@@ -5,11 +5,35 @@ import { startClock, cycleSky } from "./sky.js";
 
 const isMobile = matchMedia("(max-width:820px), (pointer:coarse)").matches;
 
+const WX = [
+  [0, "☀️"], [1, "🌤️"], [2, "⛅️"], [3, "☁️"], [45, "🌫️"], [48, "🌫️"],
+  [51, "🌦️"], [57, "🌧️"], [61, "🌧️"], [67, "🌨️"], [71, "❄️"], [77, "🌨️"],
+  [80, "🌦️"], [82, "🌧️"], [85, "❄️"], [86, "❄️"], [95, "⛈️"], [99, "⛈️"]
+];
+
+async function loadWeather() {
+  try {
+    const geo = await (await fetch("/api/geo")).json();
+    if (!geo.lat) return;
+    const wx = await (await fetch(
+      `https://api.open-meteo.com/v1/forecast?latitude=${geo.lat}&longitude=${geo.lon}&current=temperature_2m,weather_code`
+    )).json();
+    const c = wx.current;
+    let icon = "☀️";
+    for (const [code, e] of WX) if (c.weather_code >= code) icon = e;
+    document.getElementById("weather").textContent =
+      `${geo.city ? geo.city + " " : ""}${icon} ${Math.round(c.temperature_2m)}°`;
+  } catch {}
+}
+
 startClock();
 renderMobile();
 
 if (!isMobile) {
   renderDesktop();
+
+  loadWeather();
+  setInterval(loadWeather, 900000);
 
   document.getElementById("skipSky").addEventListener("click", cycleSky);
 

@@ -1,5 +1,3 @@
-import { ME } from "./content.js";
-
 const SKIES = {
   night: { s1: "#03101A", s2: "#08222F", s3: "#0D3243", glow: "#1D5F72", gold: "#9FB8C4", sun: { top: "14%", left: "76%", op: .32 } },
   dawn:  { s1: "#132239", s2: "#3B4668", s3: "#8A6E7E", glow: "#C98A72", gold: "#E8C07A", sun: { top: "66%", left: "18%", op: .55 } },
@@ -17,8 +15,7 @@ function phaseFor(h) {
 }
 
 function localHour() {
-  const s = new Intl.DateTimeFormat("en-GB", { hour: "numeric", hour12: false, timeZone: ME.tz }).format(new Date());
-  return parseInt(s, 10);
+  return new Date().getHours();
 }
 
 export function setSky() {
@@ -41,7 +38,7 @@ export function cycleSky() {
 export function startClock() {
   const tick = () => {
     document.getElementById("clock").textContent =
-      new Intl.DateTimeFormat("en-GB", { weekday: "short", hour: "2-digit", minute: "2-digit", hour12: false, timeZone: ME.tz })
+      new Intl.DateTimeFormat("en-GB", { weekday: "short", hour: "2-digit", minute: "2-digit", hour12: false })
         .format(new Date());
     if (!override) setSky();
   };
