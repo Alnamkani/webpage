@@ -3,7 +3,7 @@
   "name": "alnamkani-com",
   "compatibility_date": "2026-08-20",
   "main": "src/worker.js",
-  "workers_dev": true,
+  "workers_dev": false,
   "routes": [
     { "pattern": "alnamkani.com", "custom_domain": true },
     { "pattern": "www.alnamkani.com", "custom_domain": true }
