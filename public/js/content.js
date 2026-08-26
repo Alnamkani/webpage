@@ -30,13 +30,10 @@ export const APPS = [
       an AI-operated bilingual newsroom. LLM agents collect and rank a
       thousand headlines a day, publish articles in Arabic and English with
       their context, and produce a daily two-host AI podcast, end to end.</p>
-      <p><em>[Edit me — two or three sentences on what you actually work on
-      and why, the way you'd say it out loud at a table.]</em></p>
-      <h2>Now</h2>
-      <ul>
-        <li>Building Srmed AI.</li>
-        <li><em>[Something else you're spending time on.]</em></li>
-      </ul>
+      <p>Before this: AI engineering at Goldman Sachs in New York, a CS
+      master's at KAUST, and computer science at Purdue. The through-line is
+      building systems where AI does real work end to end — a newsroom that
+      runs itself, agents that answer phones, this site.</p>
     `
   },
   {
