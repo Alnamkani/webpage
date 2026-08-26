@@ -2,6 +2,7 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "alnamkani-com",
   "compatibility_date": "2026-08-20",
+  "main": "src/worker.js",
   "workers_dev": true,
   "routes": [
     { "pattern": "alnamkani.com", "custom_domain": true },
@@ -9,6 +10,25 @@
   ],
   "assets": {
     "directory": "./public",
+    "binding": "ASSETS",
     "html_handling": "auto-trailing-slash"
+  },
+  "kv_namespaces": [
+    { "binding": "DRAWINGS", "id": "75d0aaa00e1a4256a6f98e65a30abdbf" }
+  ],
+  "env": {
+    "preview": {
+      "name": "alnamkani-com-preview",
+      "workers_dev": true,
+      "routes": [],
+      "assets": {
+        "directory": "./public",
+        "binding": "ASSETS",
+        "html_handling": "auto-trailing-slash"
+      },
+      "kv_namespaces": [
+        { "binding": "DRAWINGS", "id": "75d0aaa00e1a4256a6f98e65a30abdbf" }
+      ]
+    }
   }
 }

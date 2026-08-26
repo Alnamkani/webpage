@@ -1,0 +1,37 @@
+:root{
+  --sky-1:#04121C; --sky-2:#0A2A3D; --sky-3:#123F52;
+  --glow:#2E7F8F; --gold:#C9A227;
+  --accent:#1B8A9E;
+
+  --pane:#F7F5F1;
+  --pane-bar:#EAE6DF;
+  --ink:#1A1A1C;
+  --ink-soft:#5C5C63;
+  --hair:#D8D2C8;
+
+  --chrome:rgba(18,22,28,.55);
+  --chrome-line:rgba(255,255,255,.16);
+  --chrome-ink:#F2F3F5;
+
+  --ui:"Space Grotesk",ui-sans-serif,system-ui,sans-serif;
+  --read:"Newsreader",Georgia,serif;
+  --mono:"JetBrains Mono",ui-monospace,monospace;
+
+  --bar-h:30px;
+  --dock-h:76px;
+  --r:11px;
+  --shadow:0 24px 60px -12px rgba(0,0,0,.55), 0 2px 8px rgba(0,0,0,.3);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:var(--ui);
+  background:var(--sky-1);
+  color:var(--chrome-ink);
+  overflow:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:4px}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+}
