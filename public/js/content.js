@@ -114,7 +114,7 @@ export const APPS = [
   },
   {
     id: "library", title: "Library", icon: "book", dock: true,
-    w: 840, h: 420,
+    w: 620, h: 560,
     html: `
       <h1>Library</h1>
       <div class="sub">Favorite books</div>
@@ -129,6 +129,8 @@ export const APPS = [
           <a class="book" href="https://g.co/kgs/8GTsXY" target="_blank" rel="noopener">
             <img src="/assets/books/skin-in-the-game.jpg" alt="Skin in the Game" loading="lazy">
             <span class="book-tip">Skin in the Game — Nassim Taleb</span></a>
+        </div>
+        <div class="shelf">
           <a class="book" href="https://g.co/kgs/26RYAt" target="_blank" rel="noopener">
             <img src="/assets/books/range.jpg" alt="Range" loading="lazy">
             <span class="book-tip">Range — David Epstein</span></a>
