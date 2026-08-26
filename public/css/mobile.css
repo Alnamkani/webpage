@@ -140,6 +140,11 @@
   #mobile button{touch-action:manipulation}
   .p-home,.p-screen .body{overscroll-behavior:contain}
 
+  .p-screen .body .row{display:block;position:relative}
+  .p-screen .body .row > div > b{display:block;padding-right:126px}
+  .p-screen .body .row .when{position:absolute;right:0;top:16px}
+  .p-screen .cv .row .when{top:13px}
+
   .p-screen .studio canvas{width:100%!important;height:auto!important;aspect-ratio:1}
   .p-screen .st-island{flex-wrap:wrap;justify-content:center;row-gap:4px;padding:7px}
   .p-screen .st-island .st-div:first-of-type{flex-basis:100%;height:0;margin:0;background:none}
