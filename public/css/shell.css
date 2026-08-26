@@ -114,3 +114,16 @@
   width:36px;height:36px;border-radius:9px;background:#F7F5F1;padding:3px;
   filter:drop-shadow(0 2px 6px rgba(0,0,0,.45));
 }
+
+#hint{
+  position:fixed;left:50%;bottom:calc(var(--dock-h) + 24px);z-index:8500;
+  transform:translate(-50%,10px);opacity:0;pointer-events:none;
+  padding:9px 18px;border-radius:99px;
+  background:var(--chrome);backdrop-filter:blur(22px) saturate(160%);
+  -webkit-backdrop-filter:blur(22px) saturate(160%);
+  border:1px solid var(--chrome-line);color:var(--chrome-ink);
+  font-size:12.5px;letter-spacing:.01em;white-space:nowrap;
+  box-shadow:0 10px 26px rgba(0,0,0,.35);
+  transition:opacity .5s ease,transform .5s ease;
+}
+#hint.show{opacity:1;transform:translate(-50%,0)}

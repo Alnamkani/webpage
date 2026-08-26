@@ -30,9 +30,26 @@ async function loadWeather() {
 startClock();
 renderMobile();
 
+function showHint() {
+  try {
+    if (localStorage.getItem("hint:v1")) return;
+    localStorage.setItem("hint:v1", "1");
+  } catch {}
+  const hint = document.createElement("div");
+  hint.id = "hint";
+  hint.textContent = "This is a desktop — click anything. Drag windows around, Esc closes.";
+  document.body.appendChild(hint);
+  requestAnimationFrame(() => hint.classList.add("show"));
+  setTimeout(() => {
+    hint.classList.remove("show");
+    setTimeout(() => hint.remove(), 600);
+  }, 9000);
+}
+
 if (!isMobile) {
   renderDesktop();
   renderWidgets();
+  showHint();
 
   loadWeather();
   setInterval(loadWeather, 900000);

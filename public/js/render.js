@@ -12,7 +12,7 @@ export function renderDesktop() {
     const glyph = app.img ? `<img src="${app.img}" alt="" width="36" height="36">` : ICONS[app.icon];
     b.innerHTML = `${glyph}<span>${app.title}</span>`;
     const open = () => app.href ? window.open(app.href, "_blank", "noopener") : launch(app.id);
-    b.addEventListener("dblclick", open);
+    b.addEventListener("click", open);
     b.addEventListener("keydown", e => { if (e.key === "Enter") open(); });
     iconWrap.appendChild(b);
 

@@ -25,6 +25,7 @@ export const APPS = [
       <img class="portrait" src="/assets/me.jpg" alt="Mohammed Alnamkani" width="84" height="84">
       <h1>${ME.name}</h1>
       <div class="sub">CTO &amp; Founder · Srmed AI · ${ME.place}</div>
+      <p><em>You're in a little operating system — click around, everything opens.</em></p>
       <p>CTO and founder of <a href="https://srmed.ai" target="_blank" rel="noopener">Srmed AI</a> —
       an AI-operated bilingual newsroom. LLM agents collect and rank a
       thousand headlines a day, publish articles in Arabic and English with
