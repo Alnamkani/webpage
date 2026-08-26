@@ -18,6 +18,13 @@ function barH() {
   return parseInt(getComputedStyle(document.documentElement).getPropertyValue("--bar-h"));
 }
 
+function dockTop() {
+  const dock = document.getElementById("dock");
+  if (dock && dock.offsetHeight) return dock.getBoundingClientRect().top;
+  const dockH = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--dock-h")) || 76;
+  return window.innerHeight - dockH;
+}
+
 function changed() {
   document.dispatchEvent(new CustomEvent("wm:change", { detail: { focused, open: [...wins.keys()] } }));
 }
@@ -51,12 +58,13 @@ export function launch(id) {
     clampToViewport(el, saved);
   } else {
     const w = Math.min(app.w, window.innerWidth - 60);
-    const h = Math.min(app.h, window.innerHeight - 130);
+    const h = Math.min(app.h, dockTop() - barH() - 24);
     const off = (cascade++ % 6) * 28;
     el.style.width = w + "px";
     el.style.height = h + "px";
     el.style.left = Math.max(130, (window.innerWidth - w) / 2 - 60 + off) + "px";
-    el.style.top = Math.max(barH() + 12, (window.innerHeight - h) / 2 - 40 + off) + "px";
+    const top = Math.max(barH() + 12, (window.innerHeight - h) / 2 - 40 + off);
+    el.style.top = Math.min(top, Math.max(barH() + 12, dockTop() - h - 8)) + "px";
   }
   el.style.zIndex = ++z;
 
@@ -104,11 +112,11 @@ function fitToContent(el, app) {
 
 function clampToViewport(el, saved) {
   const w = Math.min(parseFloat(saved.width), window.innerWidth - 40);
-  const h = Math.min(parseFloat(saved.height), window.innerHeight - barH() - 20);
+  const h = Math.min(parseFloat(saved.height), dockTop() - barH() - 16);
   el.style.width = w + "px";
   el.style.height = h + "px";
   el.style.left = Math.min(Math.max(0, parseFloat(saved.left)), window.innerWidth - 80) + "px";
-  el.style.top = Math.min(Math.max(barH(), parseFloat(saved.top)), window.innerHeight - 60) + "px";
+  el.style.top = Math.min(Math.max(barH(), parseFloat(saved.top)), Math.max(barH(), dockTop() - h - 8)) + "px";
 }
 
 export function toggleMax(id) {
@@ -211,7 +219,8 @@ function resize(el, handle, id) {
   handle.addEventListener("pointermove", e => {
     if (!on) return;
     el.style.width = Math.max(320, ow + (e.clientX - sx)) + "px";
-    el.style.height = Math.max(200, oh + (e.clientY - sy)) + "px";
+    const maxH = Math.max(200, dockTop() - parseFloat(el.style.top) - 8);
+    el.style.height = Math.min(maxH, Math.max(200, oh + (e.clientY - sy))) + "px";
   });
   handle.addEventListener("pointerup", e => {
     if (!on) return;
