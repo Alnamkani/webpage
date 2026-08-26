@@ -5,6 +5,23 @@ function fmtPrice(p) {
   return p >= 1000 ? Math.round(p).toLocaleString("en-US") : p.toFixed(2);
 }
 
+export async function wallGridHTML() {
+  const items = await (await fetch("/api/drawings")).json();
+  return items.length
+    ? items.slice(0, 6).map(d => `<img src="${d.img}" alt="" title="${captionOf(d)}">`).join("")
+    : `<span class="wg-note">be the first to draw</span>`;
+}
+
+export async function stockRowsHTML() {
+  const rows = await (await fetch("/api/stocks")).json();
+  return rows.map(r => `
+    <div class="wg-row">
+      <span class="wg-sym">${r.name}</span>
+      <span class="wg-price">${fmtPrice(r.price)}</span>
+      <span class="wg-chg ${r.change >= 0 ? "up" : "down"}">${r.change >= 0 ? "+" : ""}${r.change.toFixed(2)}%</span>
+    </div>`).join("");
+}
+
 export function renderWidgets() {
   const host = document.getElementById("widgets");
   host.innerHTML = `
@@ -23,24 +40,13 @@ export function renderWidgets() {
   wallWidget.addEventListener("keydown", e => { if (e.key === "Enter") launch("wall"); });
 
   async function loadWall() {
-    try {
-      const items = await (await fetch("/api/drawings")).json();
-      host.querySelector(".wg-grid").innerHTML = items.length
-        ? items.slice(0, 6).map(d => `<img src="${d.img}" alt="" title="${captionOf(d)}">`).join("")
-        : `<span class="wg-note">be the first to draw</span>`;
-    } catch {}
+    try { host.querySelector(".wg-grid").innerHTML = await wallGridHTML(); } catch {}
   }
 
   async function loadStocks() {
     try {
-      const rows = await (await fetch("/api/stocks")).json();
-      if (!rows.length) return;
-      host.querySelector(".wg-rows").innerHTML = rows.map(r => `
-        <div class="wg-row">
-          <span class="wg-sym">${r.name}</span>
-          <span class="wg-price">${fmtPrice(r.price)}</span>
-          <span class="wg-chg ${r.change >= 0 ? "up" : "down"}">${r.change >= 0 ? "+" : ""}${r.change.toFixed(2)}%</span>
-        </div>`).join("");
+      const html = await stockRowsHTML();
+      if (html) host.querySelector(".wg-rows").innerHTML = html;
     } catch {}
   }
 

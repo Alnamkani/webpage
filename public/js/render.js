@@ -1,5 +1,6 @@
 import { ME, APPS, ICONS } from "./content.js";
 import { launch, isOpen } from "./wm.js";
+import { wallGridHTML, stockRowsHTML } from "./widgets.js";
 
 export function renderDesktop() {
   const iconWrap = document.getElementById("icons");
@@ -63,6 +64,16 @@ export function renderMobile() {
         <div class="p-name">${ME.name}</div>
         <div class="p-role">${ME.role} · ${ME.place}</div>
       </div>
+      <div class="p-widgets">
+        <button class="p-wg p-wg-wall" data-app="wall" aria-label="Open the wall">
+          <div class="wg-title">The Wall</div>
+          <div class="wg-grid"><span class="wg-note">loading…</span></div>
+        </button>
+        <div class="p-wg p-wg-stocks">
+          <div class="wg-title">Markets</div>
+          <div class="wg-rows"><span class="wg-note">loading…</span></div>
+        </div>
+      </div>
       <div class="p-grid">${M_HOME.map(id => tile(byId(id))).join("")}</div>
     </div>
     <div class="p-dock">${M_DOCK.map(id => tile(byId(id))).join("")}</div>
@@ -80,6 +91,21 @@ export function renderMobile() {
   };
   tickClock();
   setInterval(tickClock, 20000);
+
+  const loadWall = async () => {
+    try { mob.querySelector(".p-wg-wall .wg-grid").innerHTML = await wallGridHTML(); } catch {}
+  };
+  const loadStocks = async () => {
+    try {
+      const html = await stockRowsHTML();
+      if (html) mob.querySelector(".p-wg-stocks .wg-rows").innerHTML = html;
+    } catch {}
+  };
+  document.addEventListener("wall:changed", loadWall);
+  loadWall();
+  loadStocks();
+  setInterval(loadWall, 60000);
+  setInterval(loadStocks, 300000);
 
   function sync() {
     mob.classList.toggle("in-app", stack.length > 0);
