@@ -31,9 +31,8 @@ export const APPS = [
       thousand headlines a day, publish articles in Arabic and English with
       their context, and produce a daily two-host AI podcast, end to end.</p>
       <p>Before this: AI engineering at Goldman Sachs in New York, a CS
-      master's at KAUST, and computer science at Purdue. The through-line is
-      building systems where AI does real work end to end — a newsroom that
-      runs itself, agents that answer phones, this site.</p>
+      master's at KAUST, and computer science at Purdue. I enjoy building
+      things — AI makes that faster and expands the limits.</p>
     `
   },
   {
