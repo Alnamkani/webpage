@@ -7,6 +7,8 @@ function init(body) {
   const input = form.querySelector("input");
   const msg = root.querySelector(".v-msg");
 
+  input.focus({ preventScroll: true });
+
   form.addEventListener("submit", e => {
     e.preventDefault();
     if (input.value === "password") {

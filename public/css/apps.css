@@ -203,6 +203,7 @@
 .v-form input{
   font-family:var(--mono);font-size:13px;padding:8px 12px;width:170px;
   border:1px solid var(--hair);border-radius:8px;background:#FFFDF8;color:var(--ink);
+  caret-color:var(--accent);
 }
 .v-form input:focus{outline:2px solid var(--accent);outline-offset:0}
 .v-form button{
