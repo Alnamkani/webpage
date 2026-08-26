@@ -38,7 +38,7 @@ export function renderDesktop() {
   });
 }
 
-const M_HOME = ["writing", "library", "studio", "sudoku", "atat", "fraud-lab", "wall", "srmed"];
+const M_HOME = ["writing", "library", "studio", "sudoku", "atat", "fraud-lab", "wall", "srmed", "secret"];
 const M_DOCK = ["about", "projects", "resume", "contact"];
 const M_LABELS = { about: "About", sudoku: "Sudoku" };
 
