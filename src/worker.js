@@ -1,6 +1,28 @@
+import { Gym } from "./gym.ts";
+
+export { Gym };
+
+const GYM_ROUTE = /^\/api\/gym\/([^/]+)(\/ws)?$/;
+const GYM_NAME = /^[a-z0-9-]{1,24}$/;
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+
+    // Boulder Gym: every gym name is its own Durable Object.
+    const gym = url.pathname.match(GYM_ROUTE);
+    if (gym) {
+      const name = decodeURIComponent(gym[1]).toLowerCase();
+      if (!GYM_NAME.test(name)) return new Response("Bad gym name", { status: 400 });
+      const isWs = Boolean(gym[2]);
+      if (isWs && request.headers.get("Upgrade") !== "websocket") {
+        return new Response("Expected WebSocket", { status: 426 });
+      }
+      const inner = new URL(request.url);
+      inner.searchParams.set("gym", name);
+      const stub = env.GYM.getByName(name);
+      return stub.fetch(isWs ? new Request(inner, request) : new Request(inner));
+    }
 
     if (url.pathname === "/api/geo") {
       const cf = request.cf || {};

@@ -38,9 +38,9 @@ export function renderDesktop() {
   });
 }
 
-const M_HOME = ["writing", "library", "studio", "sudoku", "atat", "fraud-lab", "wall", "srmed", "secret"];
+const M_HOME = ["writing", "library", "studio", "gym", "sudoku", "atat", "fraud-lab", "wall", "srmed", "secret"];
 const M_DOCK = ["about", "projects", "resume", "contact"];
-const M_LABELS = { about: "About", sudoku: "Sudoku" };
+const M_LABELS = { about: "About", sudoku: "Sudoku", gym: "Gym" };
 
 const M_SIG = `
   <svg viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
