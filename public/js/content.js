@@ -5,6 +5,7 @@ import { fraudApp } from "./apps/fraudlab.js";
 import { studioApp } from "./apps/studio.js";
 import { wallApp } from "./apps/wall.js";
 import { secretApp, caughtApp } from "./apps/secret.js";
+import { gymApp, gymIcon } from "./apps/gym.js";
 
 export const ME = {
   name: "Mohammed Alnamkani",
@@ -57,6 +58,13 @@ export const APPS = [
         <span class="when">2026</span>
       </div>
       <div class="row">
+        <div><b>Boulder Gym</b>
+        <p>A multiplayer climbing wall where every gym is a Cloudflare Durable
+        Object — set routes with whoever else is in the room.
+        <a href="#gym" data-launch="gym">Walk in</a>.</p></div>
+        <span class="when">multiplayer</span>
+      </div>
+      <div class="row">
         <div><b>Rule-Based Fraud Detection</b>
         <p>An interpretable fraud classifier over millions of transactions.
         <a href="#fraud-lab" data-launch="fraud-lab">Watch it classify live</a>.</p></div>
@@ -76,6 +84,7 @@ export const APPS = [
   fraudApp,
   studioApp,
   wallApp,
+  gymApp,
   {
     id: "writing", title: "Writing", icon: "doc", dock: true,
     w: 560, h: 400,
@@ -231,6 +240,7 @@ export const APPS = [
 ];
 
 export const ICONS = {
+  gym: gymIcon,
   note: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h9l5 5v13H5z"/><path d="M14 3v5h5"/><path d="M8.5 13h7M8.5 16.5h4.5"/></svg>`,
   user: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4.5 21c.6-4 3.7-6.5 7.5-6.5s6.9 2.5 7.5 6.5"/></svg>`,
   folder: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2.5h8a2 2 0 0 1 2 2V18a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>`,

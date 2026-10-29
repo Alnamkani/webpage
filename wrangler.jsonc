@@ -16,6 +16,14 @@
   "kv_namespaces": [
     { "binding": "DRAWINGS", "id": "75d0aaa00e1a4256a6f98e65a30abdbf" }
   ],
+  "durable_objects": {
+    "bindings": [{ "name": "GYM", "class_name": "Gym" }]
+  },
+  "migrations": [{ "tag": "gym-v1", "new_sqlite_classes": ["Gym"] }],
+  "vars": {
+    // Boulder Gym reset day: how often the wall is stripped. 168 = weekly.
+    "RESET_HOURS": "168"
+  },
   "env": {
     "preview": {
       "name": "alnamkani-com-preview",
@@ -28,7 +36,12 @@
       },
       "kv_namespaces": [
         { "binding": "DRAWINGS", "id": "75d0aaa00e1a4256a6f98e65a30abdbf" }
-      ]
+      ],
+      "durable_objects": {
+        "bindings": [{ "name": "GYM", "class_name": "Gym" }]
+      },
+      "migrations": [{ "tag": "gym-v1", "new_sqlite_classes": ["Gym"] }],
+      "vars": { "RESET_HOURS": "168" }
     }
   }
 }
