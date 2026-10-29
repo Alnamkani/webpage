@@ -4,7 +4,8 @@
 const API = (typeof window !== "undefined" && window.GYM_API) || ""; // e.g. "https://gym.alnamkani.com"
 const SVGNS = "http://www.w3.org/2000/svg";
 
-const GYMS = ["jeddah", "riyadh", "khobar"];
+// One gym for everyone: one Durable Object, addressed by this name.
+const GYM = "boulder-gym";
 const TYPES = [
   { id: "jug",    label: "Jug" },
   { id: "crimp",  label: "Crimp" },
@@ -85,10 +86,9 @@ function sceneSVG() {
   const seams = [];
   for (let y = 110; y < 525; y += 104) seams.push(`<line x1="0" y1="${y}" x2="1000" y2="${y}"/>`);
   for (let x = 170; x < 1000; x += 130) seams.push(`<line x1="${x}" y1="0" x2="${x}" y2="600"/>`);
-  const lamps = [160, 420, 690, 900];
 
   return `
-  <svg class="gym-svg" viewBox="0 -90 1000 690" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Climbing wall">
+  <svg class="gym-svg" viewBox="0 -55 1000 655" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Climbing wall">
     <defs>
       <linearGradient id="gym-back" x1="0" y1="0" x2="0" y2="1">
         <stop offset="0" stop-color="#04121C"/><stop offset=".7" stop-color="#0A2A3D"/><stop offset="1" stop-color="#123F52"/>
@@ -98,7 +98,6 @@ function sceneSVG() {
       <linearGradient id="gym-ply-c" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C2B59D"/><stop offset="1" stop-color="#D0C4AE"/></linearGradient>
       <linearGradient id="gym-ply-d" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A89A80"/><stop offset="1" stop-color="#B9AB92"/></linearGradient>
       <linearGradient id="gym-mat" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#174657"/><stop offset="1" stop-color="#0B2734"/></linearGradient>
-      <radialGradient id="gym-cone" cx=".5" cy="0" r="1"><stop offset="0" stop-color="#FFE7A8" stop-opacity=".55"/><stop offset=".55" stop-color="#FFE7A8" stop-opacity=".08"/><stop offset="1" stop-color="#FFE7A8" stop-opacity="0"/></radialGradient>
       <radialGradient id="gym-vignette" cx=".5" cy=".45" r=".75"><stop offset=".55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".45"/></radialGradient>
       ${Object.entries(COLORS).map(([k, c]) => `
       <radialGradient id="gym-h-${k}" cx=".32" cy=".28" r=".85">
@@ -142,11 +141,6 @@ function sceneSVG() {
       <ellipse cx="720" cy="570" rx="110" ry="12" fill="#FFF" opacity=".05" filter="url(#gym-chalk)"/>
     </g>
 
-    <g class="gym-lights">
-      ${lamps.map((x, i) => `
-        <polygon class="cone" style="--d:${i * 90}ms" points="${x - 16},28 ${x + 16},28 ${x + 210},560 ${x - 210},560" fill="url(#gym-cone)"/>
-        <rect class="lamp" style="--d:${i * 90}ms" x="${x - 22}" y="20" width="44" height="9" rx="3"/>`).join("")}
-    </g>
     <rect class="gym-dark" y="-90" width="1000" height="690" fill="#02080D"/>
     <rect y="-90" width="1000" height="690" fill="url(#gym-vignette)" pointer-events="none"/>
 
@@ -163,9 +157,10 @@ function holdMarkup(type, color, extraClass = "") {
   </g>`;
 }
 
-function iconSVG(type) {
-  return `<svg viewBox="-24 -22 48 44" aria-hidden="true">${holdMarkup(type, "ink")}</svg>`;
+function iconSVG(type, color = "ink") {
+  return `<svg viewBox="-24 -22 48 44" aria-hidden="true">${holdMarkup(type, color)}</svg>`;
 }
+const ERASER = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.5 20 4 15.5a2 2 0 0 1 0-2.8L12.7 4a2 2 0 0 1 2.8 0l4.5 4.5a2 2 0 0 1 0 2.8L11 20z"/><path d="M8.5 20H20M9 9l6 6"/></svg>`;
 
 // ---------------------------------------------------------------------------
 
@@ -183,7 +178,7 @@ function init(body) {
   const gHolds = $(".gym-holds"), gFx = $(".gym-fx"), gCursors = $(".gym-cursors"), gGhost = $(".gym-ghost");
 
   const st = {
-    gym: store("gym:name") || "jeddah",
+    gym: GYM,
     name: store("gym:climber") || randomName(),
     type: "jug",
     color: "teal",
@@ -205,13 +200,18 @@ function init(body) {
 
   // ---------- toolbar ----------
   $(".gym-types").innerHTML = TYPES.map(t =>
-    `<button class="gym-type" data-type="${t.id}" title="${t.label}">${iconSVG(t.id)}<span>${t.label}</span></button>`).join("");
+    `<button class="gym-type" data-type="${t.id}" title="${t.label}"><span class="ico"></span><span class="lbl">${t.label}</span></button>`).join("");
   $(".gym-colors").innerHTML = Object.entries(COLORS).map(([k, c]) =>
-    `<button class="gym-swatch" data-color="${k}" title="${k}" style="--c:${c.fill}"></button>`).join("");
-  $(".gym-gympick").innerHTML = GYMS.map(g => `<option value="${g}">${g}</option>`).join("") +
-    `<option value="__new">+ new gym…</option>`;
+    `<button class="gym-swatch" data-color="${k}" title="${k[0].toUpperCase() + k.slice(1)}" aria-label="${k}"><i style="--c:${c.fill}"></i></button>`).join("");
+  $(".gym-erase").innerHTML = ERASER;
+  // The palette lives over the wall on desktop, docked under it on the phone.
+  if (phone) root.appendChild($(".gym-island"));
 
   function syncTools() {
+    // Hold icons take the selected route color, so the palette previews what you'll place.
+    root.querySelectorAll(".gym-type").forEach(b => {
+      if (b.dataset.c !== st.color) { b.querySelector(".ico").innerHTML = iconSVG(b.dataset.type, st.color); b.dataset.c = st.color; }
+    });
     root.querySelectorAll(".gym-type").forEach(b => b.classList.toggle("on", !st.erase && b.dataset.type === st.type));
     root.querySelectorAll(".gym-swatch").forEach(b => b.classList.toggle("on", b.dataset.color === st.color));
     $(".gym-erase").classList.toggle("on", st.erase);
@@ -227,13 +227,13 @@ function init(body) {
     st.color = b.dataset.color; st.erase = false; syncTools();
   });
   $(".gym-erase").addEventListener("click", () => { st.erase = !st.erase; syncTools(); });
-  $(".gym-me").textContent = st.name;
+  $(".gym-me .me-name").textContent = st.name;
   $(".gym-me").addEventListener("click", () => {
     const n = prompt("Your climber name", st.name);
     if (!n || !n.trim()) return;
     st.name = n.trim().slice(0, 20);
     store("gym:climber", st.name);
-    $(".gym-me").textContent = st.name;
+    $(".gym-me .me-name").textContent = st.name;
     send({ t: "rename", name: st.name });
   });
   $(".gym-hoodbtn").addEventListener("click", () => {
@@ -242,18 +242,6 @@ function init(body) {
     store(HOOD_KEY, root.classList.contains("hood-open") ? "1" : "0");
   });
   if (phone ? store(HOOD_KEY) === "1" : store(HOOD_KEY) !== "0") root.classList.add("hood-open");
-
-  const pick = $(".gym-gympick");
-  pick.addEventListener("change", () => {
-    let g = pick.value;
-    if (g === "__new") {
-      g = (prompt("Name a new gym (a–z, 0–9, dashes)", "my-gym") || "").toLowerCase().replace(/[^a-z0-9-]/g, "").slice(0, 24);
-      if (!g) { pick.value = st.gym; return; }
-      if (![...pick.options].some(o => o.value === g)) pick.insertBefore(new Option(g, g), pick.lastElementChild);
-    }
-    pick.value = g;
-    switchGym(g);
-  });
 
   // ---------- log ----------
   function log(kind, html) {
@@ -359,10 +347,11 @@ function init(body) {
 
   // ---------- climbers ----------
   function renderClimbers() {
-    const list = [...st.climbers.values()];
+    const list = [...st.climbers.values()].filter(c => c.id !== st.you?.id);
+    if (st.you) $(".gym-me").style.setProperty("--h", st.climbers.get(st.you.id)?.hue ?? st.you.hue);
     $(".gym-here").innerHTML = list.map(c => `
       <span class="av ${c.id === st.you?.id ? "me" : ""}" style="--h:${c.hue}" title="${esc(c.name)}">${esc(c.name.slice(0, 1).toUpperCase())}</span>`).join("") +
-      `<span class="here-n">${list.length} in the gym</span>`;
+      (list.length ? `<span class="here-n">+ ${list.length} climbing</span>` : `<span class="here-n">just you</span>`);
     hood();
   }
   function drawCursor(id, x, y) {
@@ -457,20 +446,6 @@ function init(body) {
     };
   }
 
-  function switchGym(g) {
-    st.gym = g;
-    store("gym:name", g);
-    const old = st.ws;
-    st.ws = null;
-    try { old?.close(1000, "switch"); } catch {}
-    st.holds.clear(); st.routes.clear(); st.climbers.clear(); st.meta = null; st.focus = null;
-    gHolds.innerHTML = ""; gCursors.innerHTML = "";
-    lights(false);
-    renderRoutes(); renderClimbers();
-    log("info", `switching gyms → a <b>different name</b> is a <b>different object</b>`);
-    setTimeout(connect, 450);
-  }
-
   function onMessage(m) {
     switch (m.t) {
       case "welcome": {
@@ -521,6 +496,10 @@ function init(body) {
         if (pending && m.from === st.you?.id) { pending.remove(); st.pending.delete(m.ref); }
         const by = st.climbers.get(m.from);
         drawHold(m.hold, { pop: true, by: by?.hue ?? 44 });
+        if (m.from === st.you?.id && !store("gym:tip")) {
+          store("gym:tip", "1");
+          setTimeout(() => toast(phone ? "Tap a hold to turn or remove it" : "Drag to move · scroll to turn · right-click to remove"), 500);
+        }
         renderRoutes(); hood();
         logWrite(m, `${m.hold.color} ${m.hold.type} @ ${Math.round(m.hold.x)},${Math.round(m.hold.y)}`);
         return;
@@ -712,22 +691,15 @@ function init(body) {
     try { ws?.close(1000, "window closed"); } catch {}
   }
 
-  pick.value = st.gym;
-  if (![...pick.options].some(o => o.value === st.gym)) {
-    pick.insertBefore(new Option(st.gym, st.gym), pick.lastElementChild);
-    pick.value = st.gym;
-  }
   syncTools(); renderRoutes(); renderClimbers();
   if (phone) {
-    $(".gym-erase").textContent = "⌫";
-    $(".gym-erase").setAttribute("aria-label", "Erase");
     requestAnimationFrame(() => { pan.scrollLeft = (pan.scrollWidth - pan.clientWidth) * 0.15; });
     if (!store("gym:phonehint")) {
       store("gym:phonehint", "1");
       setTimeout(() => toast("Swipe to look around · tap the wall to place"), 1600);
     }
   }
-  log("info", `each gym is one <b>Durable Object</b>. Same name → same instance, anywhere on Earth.`);
+  log("info", `the gym is one <b>Durable Object</b>. Everyone, anywhere on Earth, reaches the same instance.`);
   setTimeout(connect, 300);
 }
 
@@ -743,11 +715,18 @@ function layoutHTML() {
         </div>
         <div class="gym-top">
           <div class="gym-sign">◆ BOULDER GYM</div>
-          <label class="gym-pickwrap" title="Each gym name is a separate Durable Object">
-            <select class="gym-gympick" aria-label="Gym"></select>
-          </label>
-          <div class="gym-here"></div>
+          <div class="gym-people">
+            <div class="gym-here"></div>
+            <button class="gym-me" title="Rename yourself"><i class="me-dot"></i><span class="me-name"></span><span class="me-edit" aria-hidden="true">✎</span></button>
+          </div>
           <button class="gym-hoodbtn" title="Under the hood">⌁ Under the hood</button>
+        </div>
+        <div class="gym-island" role="toolbar" aria-label="Holds">
+          <div class="gym-types"></div>
+          <span class="gym-div"></span>
+          <div class="gym-colors"></div>
+          <span class="gym-div"></span>
+          <button class="gym-erase" title="Erase — or right-click a hold" aria-label="Erase"></button>
         </div>
         <div class="gym-routes"><span class="gym-count">0 holds</span><ul></ul></div>
         <div class="gym-status"></div>
@@ -771,16 +750,7 @@ function layoutHTML() {
         </div>
       </aside>
     </div>
-    <div class="gym-tools">
-      <div class="gym-types"></div>
-      <span class="sep"></span>
-      <div class="gym-colors"></div>
-      <span class="sep"></span>
-      <button class="gym-erase" title="Erase (E) — or right-click a hold">⌫ Erase</button>
-      <span class="grow"></span>
-      <span class="gym-hint">drag to move · scroll to rotate · right-click to remove</span>
-      <button class="gym-me" title="Rename yourself"></button>
-    </div>`;
+`;
 }
 
 export const gymIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21 6 4h12l2 17"/><circle cx="9" cy="8.5" r="1.4"/><circle cx="14.5" cy="11" r="1.6"/><circle cx="10" cy="15" r="1.3"/><circle cx="15" cy="17.5" r="1.2"/></svg>`;
