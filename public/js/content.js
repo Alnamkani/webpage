@@ -135,17 +135,51 @@ export const APPS = [
           <a class="book" href="https://g.co/kgs/8GTsXY" target="_blank" rel="noopener">
             <img src="/assets/books/skin-in-the-game.jpg" alt="Skin in the Game" loading="lazy">
             <span class="book-tip">Skin in the Game — Nassim Taleb</span></a>
-        </div>
-        <div class="shelf">
           <a class="book" href="https://g.co/kgs/26RYAt" target="_blank" rel="noopener">
             <img src="/assets/books/range.jpg" alt="Range" loading="lazy">
             <span class="book-tip">Range — David Epstein</span></a>
+        </div>
+        <div class="shelf">
           <a class="book" href="https://g.co/kgs/Fp6C2K" target="_blank" rel="noopener">
             <img src="/assets/books/animal-farm.jpg" alt="Animal Farm" loading="lazy">
             <span class="book-tip">Animal Farm — George Orwell</span></a>
           <a class="book" href="https://g.co/kgs/sKbDsC" target="_blank" rel="noopener">
             <img src="/assets/books/radical-markets.jpg" alt="Radical Markets" loading="lazy">
             <span class="book-tip">Radical Markets — Posner &amp; Weyl</span></a>
+          <a class="book" href="https://books.apple.com/us/audiobook/maintenance-of-everything-part-one-maintenance/id1854183807" target="_blank" rel="noopener">
+            <img src="/assets/books/maintenance-of-everything.jpg" alt="Maintenance of Everything" loading="lazy">
+            <span class="book-tip">Maintenance of Everything — Stewart Brand</span></a>
+          <a class="book" href="https://books.apple.com/us/audiobook/skunk-works/id1443072742" target="_blank" rel="noopener">
+            <img src="/assets/books/skunk-works.jpg" alt="Skunk Works" loading="lazy">
+            <span class="book-tip">Skunk Works — Ben Rich &amp; Leo Janos</span></a>
+        </div>
+        <div class="shelf">
+          <a class="book" href="https://books.apple.com/us/book/team-topologies-2nd-edition/id6745790227" target="_blank" rel="noopener">
+            <img src="/assets/books/team-topologies.jpg" alt="Team Topologies" loading="lazy">
+            <span class="book-tip">Team Topologies — Skelton &amp; Pais</span></a>
+          <a class="book" href="https://books.apple.com/us/audiobook/how-to-build-a-car/id1441764360" target="_blank" rel="noopener">
+            <img src="/assets/books/how-to-build-a-car.jpg" alt="How to Build a Car" loading="lazy">
+            <span class="book-tip">How to Build a Car — Adrian Newey</span></a>
+          <a class="book" href="https://books.apple.com/us/audiobook/when-the-wolves-bite/id1442411725" target="_blank" rel="noopener">
+            <img src="/assets/books/when-the-wolves-bite.jpg" alt="When the Wolves Bite" loading="lazy">
+            <span class="book-tip">When the Wolves Bite — Scott Wapner</span></a>
+          <a class="book" href="https://books.apple.com/us/audiobook/dune/id1442046673" target="_blank" rel="noopener">
+            <img src="/assets/books/dune.jpg" alt="Dune" loading="lazy">
+            <span class="book-tip">Dune — Frank Herbert</span></a>
+        </div>
+        <div class="shelf">
+          <a class="book" href="https://books.apple.com/us/book/the-art-of-doing-science-and-engineering/id1516295959" target="_blank" rel="noopener">
+            <img src="/assets/books/art-of-doing-science.jpg" alt="The Art of Doing Science and Engineering" loading="lazy">
+            <span class="book-tip">The Art of Doing Science &amp; Engineering — Richard Hamming</span></a>
+          <a class="book" href="https://books.apple.com/us/book/the-lean-startup/id422540072" target="_blank" rel="noopener">
+            <img src="/assets/books/lean-startup.jpg" alt="The Lean Startup" loading="lazy">
+            <span class="book-tip">The Lean Startup — Eric Ries</span></a>
+          <a class="book" href="https://books.apple.com/us/book/poor-charlies-almanack/id6449554550" target="_blank" rel="noopener">
+            <img src="/assets/books/poor-charlies-almanack.jpg" alt="Poor Charlie's Almanack" loading="lazy">
+            <span class="book-tip">Poor Charlie’s Almanack — Charlie Munger</span></a>
+          <a class="book" href="https://books.apple.com/us/book/good-economics-for-hard-times/id1455076648" target="_blank" rel="noopener">
+            <img src="/assets/books/good-economics.jpg" alt="Good Economics for Hard Times" loading="lazy">
+            <span class="book-tip">Good Economics for Hard Times — Banerjee &amp; Duflo</span></a>
         </div>
       </div>
     `

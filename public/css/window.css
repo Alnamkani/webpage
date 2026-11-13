@@ -105,8 +105,8 @@
 }
 .book:hover .book-tip,.book:focus-visible .book-tip{opacity:1}
 @container (max-width:480px){
-  .book img{height:112px}
-  .shelf{gap:18px;min-height:132px;margin-bottom:36px}
+  .book img{height:96px}
+  .shelf{gap:12px;padding:0 4px 10px;min-height:116px;margin-bottom:34px}
 }
 
 .cv .cv-head{margin-bottom:8px}
